@@ -28,35 +28,37 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_message"
+                android:id="@+id/tv_my_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:paddingLeft="4dp"
-                android:background="@drawable/rounded_cornel"
+                android:background="@drawable/my_message_text_view_background"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
-                android:visibility="visible"/>
+                android:visibility="invisible"/>
 
             <TextView
-                android:id="@+id/tv_message2"
+                android:id="@+id/tv_computer_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:paddingLeft="4dp"
-                android:background="@drawable/rounded_cornel"
+                android:background="@drawable/computer_message_text_view_background"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
-                android:visibility="visible"/>
+                android:visibility="invisible"/>
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_voiceRecognition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="4dp"
             android:src="@drawable/microphone_1"/>
     </LinearLayout>
 
