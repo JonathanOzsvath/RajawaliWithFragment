@@ -8,9 +8,12 @@ import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +54,7 @@ public class MainActivityFragment extends Fragment implements IDisplay{
     private TextView tvMyMessage;
     private TextView tvComputerMessage;
     private FloatingActionButton fabMessageRecognition;
+    private Button btnChat;
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
     public Bot bot;
@@ -73,7 +77,25 @@ public class MainActivityFragment extends Fragment implements IDisplay{
         tvMyMessage = (TextView) frameLayout.findViewById(R.id.tv_my_message);
         tvComputerMessage = (TextView) frameLayout.findViewById(R.id.tv_computer_message);
         fabMessageRecognition = (FloatingActionButton) frameLayout.findViewById(R.id.fab_voiceRecognition);
+        btnChat = (Button) frameLayout.findViewById(R.id.btnChangeFragment);
 
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.setCustomAnimations(
+                        android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right);
+                ChatFragment chatFragment = (ChatFragment) fm.findFragmentByTag(ChatFragment.TAG);
+                if (chatFragment == null){
+                    chatFragment = new ChatFragment();
+                }
+                ft.replace(R.id.content_frame, chatFragment, ChatFragment.TAG);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
         fabMessageRecognition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,9 +125,9 @@ public class MainActivityFragment extends Fragment implements IDisplay{
      * */
     private void promptSpeechInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.UK);
+        /*intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);*/
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.UK.toString());
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
                 getString(R.string.speech_prompt));
         try {
