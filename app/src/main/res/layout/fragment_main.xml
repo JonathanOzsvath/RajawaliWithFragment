@@ -45,7 +45,7 @@
                     android:background="@drawable/my_message_text_view_background"
                     android:textColor="#ffffff"
                     android:textSize="20sp"
-                    android:visibility="visible"/>
+                    android:visibility="invisible"/>
 
                 <TextView
                     android:id="@+id/tv_computer_message"
@@ -57,7 +57,7 @@
                     android:background="@drawable/computer_message_text_view_background"
                     android:textColor="#ffffff"
                     android:textSize="20sp"
-                    android:visibility="visible"/>
+                    android:visibility="invisible"/>
             </LinearLayout>
 
             <android.support.design.widget.FloatingActionButton

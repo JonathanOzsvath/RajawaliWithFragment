@@ -5,7 +5,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-public class MainActivity extends FragmentActivity {
+import java.util.ArrayList;
+
+import Pojo.ChatMessage;
+
+public class MainActivity extends FragmentActivity implements MainActivityFragment.MessagesList {
 
     private MainActivityFragment fragment;
 
@@ -23,5 +27,11 @@ public class MainActivity extends FragmentActivity {
 
         transaction.replace(R.id.content_frame, fragment, fragment.TAG);
         transaction.commit();
+    }
+
+    @Override
+    public void sendMessages(ArrayList<ChatMessage> messages) {
+        ChatFragment chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentByTag(ChatFragment.TAG);
+        chatFragment.getMessagesList(messages);
     }
 }

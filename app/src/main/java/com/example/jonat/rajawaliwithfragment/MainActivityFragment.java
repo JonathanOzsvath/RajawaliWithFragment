@@ -1,6 +1,7 @@
 package com.example.jonat.rajawaliwithfragment;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import Pojo.ChatMessage;
+
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -45,7 +48,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class MainActivityFragment extends Fragment implements IDisplay{
 
-    public static final String TAG = "Fragment";
+    public static final String TAG = "MainFragment";
 
     protected FrameLayout frameLayout;
     protected ISurface iSurface;
@@ -57,10 +60,27 @@ public class MainActivityFragment extends Fragment implements IDisplay{
     private Button btnChat;
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
+    private ArrayList<ChatMessage> chatMessages;
+
     public Bot bot;
     public static Chat chat;
 
+    MessagesList messagesList;
+
     public MainActivityFragment() {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            messagesList = (MessagesList) context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString()
+                    + " must implement TextClicked");
+        }
+
+        chatMessages = new ArrayList<>();
     }
 
     @Override
@@ -103,10 +123,23 @@ public class MainActivityFragment extends Fragment implements IDisplay{
             }
         });
 
+        if (chatMessages.size() >= 2){
+            tvMyMessage.setText(chatMessages.get(chatMessages.size()-2).getContent());
+            tvMyMessage.setVisibility(View.VISIBLE);
+            tvComputerMessage.setText(chatMessages.get(chatMessages.size()-1).getContent());
+            tvComputerMessage.setVisibility(View.VISIBLE);
+        }
+
         iSurface = (ISurface) frameLayout.findViewById(R.id.rajwali_surface);
         iSurfaceRenderer = createRenderer();
         iSurface.setSurfaceRenderer(iSurfaceRenderer);
         return frameLayout;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        messagesList.sendMessages(chatMessages);
     }
 
     @Override
@@ -152,11 +185,13 @@ public class MainActivityFragment extends Fragment implements IDisplay{
 
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    chatMessages.add(new ChatMessage(result.get(0),true, false));
                     tvMyMessage.setText(result.get(0));
                     if (tvMyMessage.getVisibility() == View.INVISIBLE)
                         tvMyMessage.setVisibility(View.VISIBLE);
 
                     String response = chat.multisentenceRespond(result.get(0));
+                    chatMessages.add(new ChatMessage(response,false,false));
                     tvComputerMessage.setText(response);
                     if (tvComputerMessage.getVisibility() == View.INVISIBLE)
                         tvComputerMessage.setVisibility(View.VISIBLE);
@@ -164,7 +199,6 @@ public class MainActivityFragment extends Fragment implements IDisplay{
                 }
                 break;
             }
-
         }
     }
 
@@ -203,11 +237,11 @@ public class MainActivityFragment extends Fragment implements IDisplay{
                 e.printStackTrace();
             }
         }
-//get the working directory
+        //get the working directory
         MagicStrings.root_path = Environment.getExternalStorageDirectory().toString() + "/hari";
         System.out.println("Working Directory = " + MagicStrings.root_path);
         AIMLProcessor.extension =  new PCAIMLProcessorExtension();
-//Assign the AIML files to bot for processing
+        //Assign the AIML files to bot for processing
         bot = new Bot("Hari", MagicStrings.root_path, "chat");
         chat = new Chat(bot);
         String[] args = null;
@@ -237,5 +271,9 @@ public class MainActivityFragment extends Fragment implements IDisplay{
 
         System.out.println("Human: "+request);
         System.out.println("Robot: " + response);
+    }
+
+    public interface MessagesList {
+        public void sendMessages(ArrayList<ChatMessage> messages);
     }
 }

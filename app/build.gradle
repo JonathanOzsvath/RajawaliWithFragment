@@ -27,4 +27,5 @@ dependencies {
     compile 'org.rajawali3d:rajawali:1.1.346-SNAPSHOT@aar'
     compile 'com.android.support:design:25.0.1'
     compile 'com.android.support:support-v4:25.2.0'
+    compile 'me.himanshusoni.chatmessageview:chat-message-view:1.0.3'
 }

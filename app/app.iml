@@ -111,6 +111,7 @@
     <orderEntry type="library" exported="" name="rajawali-1.1.346-SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="support-media-compat-25.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-core-ui-25.2.0" level="project" />
+    <orderEntry type="library" exported="" name="chat-message-view-1.0.3" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-25.0.1" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-25.0.1" level="project" />
