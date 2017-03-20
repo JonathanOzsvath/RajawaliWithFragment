@@ -4,6 +4,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.speech.RecognizerIntent;
@@ -14,7 +16,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,9 +37,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import AsyncTask.AsyncTaskMary;
 import Pojo.ChatMessage;
 
 import static android.app.Activity.RESULT_OK;
@@ -46,7 +50,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements IDisplay{
+public class MainActivityFragment extends Fragment implements IDisplay, AsyncTaskMary.MoveCompleteListener{
 
     public static final String TAG = "MainFragment";
 
@@ -57,10 +61,24 @@ public class MainActivityFragment extends Fragment implements IDisplay{
     private TextView tvMyMessage;
     private TextView tvComputerMessage;
     private FloatingActionButton fabMessageRecognition;
-    private Button btnChat;
+    private FloatingActionButton fabChat;
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
     private ArrayList<ChatMessage> chatMessages;
+
+    public static final String OUTPUT_TYPE_AUDIO = "AUDIO";
+    public static final String OUTPUT_TYPE_ACOUSTPARAMS = "ACOUSTPARAMS";
+
+//    private final String BASE_URL = "http://192.168.0.113:59125/";
+    private final String BASE_URL = "http://mary.dfki.de:59125/";
+    private final String INPUT_TYPE = "TEXT";
+    private final String LOCALE = "en_US";
+    private  String inputText = "how are you mother?";
+    private final String VOICE = "cmu-bdl";
+    private final String AUDIO = "WAVE_FILE";
+
+    private AsyncTaskMary asyncTaskMary;
+
 
     public Bot bot;
     public static Chat chat;
@@ -97,9 +115,9 @@ public class MainActivityFragment extends Fragment implements IDisplay{
         tvMyMessage = (TextView) frameLayout.findViewById(R.id.tv_my_message);
         tvComputerMessage = (TextView) frameLayout.findViewById(R.id.tv_computer_message);
         fabMessageRecognition = (FloatingActionButton) frameLayout.findViewById(R.id.fab_voiceRecognition);
-        btnChat = (Button) frameLayout.findViewById(R.id.btnChangeFragment);
+        fabChat = (FloatingActionButton) frameLayout.findViewById(R.id.btnChangeFragment);
 
-        btnChat.setOnClickListener(new View.OnClickListener() {
+        fabChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
@@ -196,10 +214,36 @@ public class MainActivityFragment extends Fragment implements IDisplay{
                     if (tvComputerMessage.getVisibility() == View.INVISIBLE)
                         tvComputerMessage.setVisibility(View.VISIBLE);
 
+                    inputText = response;
+                    String url = getURL(inputText, OUTPUT_TYPE_AUDIO);
+                    asyncTaskMary = new AsyncTaskMary(getActivity(), MainActivityFragment.this, OUTPUT_TYPE_AUDIO);
+                    asyncTaskMary.execute(url);
+
+                    url = getURL(inputText, OUTPUT_TYPE_ACOUSTPARAMS);
+                    asyncTaskMary = new AsyncTaskMary(getActivity(),MainActivityFragment.this, OUTPUT_TYPE_ACOUSTPARAMS);
+                    asyncTaskMary.execute(url);
                 }
                 break;
             }
         }
+    }
+
+    public String getURL(String inputText, String outputType){
+        StringBuilder getURL = new StringBuilder(BASE_URL);
+
+        getURL.append("process?INPUT_TYPE=" + INPUT_TYPE);
+        getURL.append("&OUTPUT_TYPE=" + outputType);
+        getURL.append("&LOCALE=" + LOCALE);
+        getURL.append("&INPUT_TEXT=");
+        try {
+            getURL.append(URLEncoder.encode(inputText, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        getURL.append("&VOICE=" + VOICE);
+        getURL.append("&AUDIO=" + AUDIO);
+
+        return getURL.toString();
     }
 
     public void chatBot(){
@@ -271,6 +315,22 @@ public class MainActivityFragment extends Fragment implements IDisplay{
 
         System.out.println("Human: "+request);
         System.out.println("Robot: " + response);
+    }
+
+    @Override
+    public void OnTaskComplete(String aResult, String outputType) {
+        Toast.makeText(getContext(), aResult, Toast.LENGTH_LONG).show();
+
+        if (outputType == OUTPUT_TYPE_AUDIO) {
+            File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Mary/proba.mp3");
+            MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), Uri.fromFile(cacheDir));
+            mediaPlayer.start();
+        }
+    }
+
+    @Override
+    public void onError(String aError) {
+        Toast.makeText(getContext(), aError, Toast.LENGTH_LONG).show();
     }
 
     public interface MessagesList {
