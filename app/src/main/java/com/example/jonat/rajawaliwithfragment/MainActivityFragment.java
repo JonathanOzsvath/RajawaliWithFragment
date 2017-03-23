@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -137,7 +139,8 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
         fabMessageRecognition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                promptSpeechInput();
+                if (checkInternetConnection())
+                    promptSpeechInput();
             }
         });
 
@@ -326,6 +329,17 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
             MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), Uri.fromFile(cacheDir));
             mediaPlayer.start();
         }
+    }
+
+    public boolean checkInternetConnection(){
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo == null){
+            Toast.makeText(getContext(), "No Internet connection", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
     @Override
