@@ -9,9 +9,12 @@ import com.example.jonat.rajawaliwithfragment.MainActivityFragment;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -72,7 +75,12 @@ public class AsyncTaskMary extends AsyncTask<String, Void, String> {
                 output.flush();
                 output.close();
                 input.close();
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                error = "Mary server not found!";
                 e.printStackTrace();
             }
         }else {
@@ -93,7 +101,12 @@ public class AsyncTaskMary extends AsyncTask<String, Void, String> {
                 output.flush();
                 output.close();
                 input.close();
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                error = "Mary server not found!";
                 e.printStackTrace();
             }
         }
@@ -110,6 +123,10 @@ public class AsyncTaskMary extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         pd.dismiss();
-        listener.OnTaskComplete("Ready", outputType);
+        if (error != null){
+            listener.onError(error);
+        }else {
+            listener.OnTaskComplete("Ready", outputType);
+        }
     }
 }

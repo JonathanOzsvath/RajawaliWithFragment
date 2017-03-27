@@ -217,14 +217,16 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
                     if (tvComputerMessage.getVisibility() == View.INVISIBLE)
                         tvComputerMessage.setVisibility(View.VISIBLE);
 
-                    inputText = response;
-                    String url = getURL(inputText, OUTPUT_TYPE_AUDIO);
-                    asyncTaskMary = new AsyncTaskMary(getActivity(), MainActivityFragment.this, OUTPUT_TYPE_AUDIO);
-                    asyncTaskMary.execute(url);
+                    if (checkInternetConnection()) {
+                        inputText = response;
+                        String url = getURL(inputText, OUTPUT_TYPE_AUDIO);
+                        asyncTaskMary = new AsyncTaskMary(getActivity(), MainActivityFragment.this, OUTPUT_TYPE_AUDIO);
+                        asyncTaskMary.execute(url);
 
-                    url = getURL(inputText, OUTPUT_TYPE_ACOUSTPARAMS);
-                    asyncTaskMary = new AsyncTaskMary(getActivity(),MainActivityFragment.this, OUTPUT_TYPE_ACOUSTPARAMS);
-                    asyncTaskMary.execute(url);
+                        url = getURL(inputText, OUTPUT_TYPE_ACOUSTPARAMS);
+                        asyncTaskMary = new AsyncTaskMary(getActivity(), MainActivityFragment.this, OUTPUT_TYPE_ACOUSTPARAMS);
+                        asyncTaskMary.execute(url);
+                    }
                 }
                 break;
             }
@@ -320,17 +322,6 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
         System.out.println("Robot: " + response);
     }
 
-    @Override
-    public void OnTaskComplete(String aResult, String outputType) {
-        Toast.makeText(getContext(), aResult, Toast.LENGTH_LONG).show();
-
-        if (outputType == OUTPUT_TYPE_AUDIO) {
-            File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Mary/proba.mp3");
-            MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), Uri.fromFile(cacheDir));
-            mediaPlayer.start();
-        }
-    }
-
     public boolean checkInternetConnection(){
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -340,6 +331,17 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void OnTaskComplete(String aResult, String outputType) {
+        Toast.makeText(getContext(), aResult, Toast.LENGTH_LONG).show();
+
+        if (outputType == OUTPUT_TYPE_AUDIO) {
+            File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Mary/proba.mp3");
+            MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), Uri.fromFile(cacheDir));
+            mediaPlayer.start();
+        }
     }
 
     @Override
