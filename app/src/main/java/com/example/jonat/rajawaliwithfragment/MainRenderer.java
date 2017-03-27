@@ -14,8 +14,12 @@ import org.rajawali3d.loader.ParsingException;
 import org.rajawali3d.materials.Material;
 import org.rajawali3d.materials.methods.DiffuseMethod;
 import org.rajawali3d.materials.methods.SpecularMethod;
+import org.rajawali3d.materials.textures.ATexture;
+import org.rajawali3d.materials.textures.Texture;
 import org.rajawali3d.primitives.Sphere;
 import org.rajawali3d.renderer.Renderer;
+
+import java.nio.FloatBuffer;
 
 /**
  * Created by jonat on 2017. 03. 07..
@@ -69,7 +73,6 @@ public class MainRenderer extends Renderer {
             objParser.parse();
             mObjectGroup = objParser.getParsedObject();
             mObjectGroup.setScale(0.25);
-            mObjectGroup.setMaterial(material);
             getCurrentScene().addChild(mObjectGroup);
         } catch (ParsingException e) {
             e.printStackTrace();
