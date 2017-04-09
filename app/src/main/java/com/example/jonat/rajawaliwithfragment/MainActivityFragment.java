@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,11 +60,13 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
     protected FrameLayout frameLayout;
     protected ISurface iSurface;
     protected ISurfaceRenderer iSurfaceRenderer;
+    private MainRenderer mainRenderer;
 
     private TextView tvMyMessage;
     private TextView tvComputerMessage;
     private FloatingActionButton fabMessageRecognition;
     private FloatingActionButton fabChat;
+    private Button btnPlay;
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
     private ArrayList<ChatMessage> chatMessages;
@@ -80,7 +83,6 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
     private final String AUDIO = "WAVE_FILE";
 
     private AsyncTaskMary asyncTaskMary;
-
 
     public Bot bot;
     public static Chat chat;
@@ -110,6 +112,7 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
 
         chatBot();
 
+        mainRenderer = new MainRenderer(getContext());
         frameLayout = (FrameLayout) inflater.inflate(getLayoutID(), container, false);
 
         frameLayout.findViewById(R.id.relative_layout_loader_container);
@@ -118,6 +121,14 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
         tvComputerMessage = (TextView) frameLayout.findViewById(R.id.tv_computer_message);
         fabMessageRecognition = (FloatingActionButton) frameLayout.findViewById(R.id.fab_voiceRecognition);
         fabChat = (FloatingActionButton) frameLayout.findViewById(R.id.btnChangeFragment);
+        btnPlay = (Button) frameLayout.findViewById(R.id.btnPlay);
+
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainRenderer.play();
+            }
+        });
 
         fabChat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +176,7 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
 
     @Override
     public ISurfaceRenderer createRenderer() {
-        return new MainRenderer(getActivity());
+        return mainRenderer;
     }
 
     /*Fragmenthez tartozó xml*/

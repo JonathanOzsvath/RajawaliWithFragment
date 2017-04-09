@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<xfdp>
+	<head>
+		<file version="0.2" />
+		<fapu ENS0="3.68572" ES0="4.63362" IRISD0="1.842578" MNS0="2.57983" MW0="3.63306" />
+		<translation x="0" y="-1" z="-659" />
+		<rotation axis_angle="0.407589" axis_x="-0.999632" axis_y="-0.0154467" axis_z="0.0223226" />
+	</head>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="8643" name="2.1">
+		<indices>1080 1081 1082 1083 1084 1088 1097 1098 1099 2097 2126 2127 2128 2129 2130 2131 2132 2133 2134 2694 2695 3150 3152 3153 3154 3155 3156 3157 3158 3358 3360 3363 3364 3365 3384 3385 3833 3834 3835 3842 3843 3844 3845 3846 3847 3859 3860 3861 3862 3863 3864 3865 3866 3867 3868 3873 3874 3897 3898 4226 4227 4237 4238 4239 4240 4241 4242 4243 4244 4245 4246 4247 4248 4249 4250 4251 4252 4253 4254 4255 4256 4257 4268 4269 4276 4277 4278 4279 4280 4281 4282 4283 4284 4285 4286 4288 4289 4290 4295 4296 4297 4461 4462 4464 4466 4468 4531 4532 4533 4534 4535 4536 4537 4538 4539 5341 5343 5618 5619 6454 6455 6457 6458 6502 6504 6505 6510 6511 6630 6649 7020 7021 7222 7478 7559 7560 7561 7630 7631 7632 7874 7904 7935 7936 8047 8050 8194 8236 8256 8458 8531 8535 8551 8552 8606 8607 8608 8609 8611 8612 8639 8640 8643 8644</indices>
+		<influence fap="2" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="3874" name="2.10">
+		<indices>2127 2128 2129 2130 2131 3156 3157 3158 3384 3385 3847 3866 3867 3868 3873 3874 4268 4269 4273 4278 4279 4284 4285 4286 4288 4289 4290 4295 4296 4297 4461 4462 4464 4465 4466 4467 4468 4531 4532 4536 4537 4538 4539 4540 4542 8236 8256 8535 8551 8606 8608 8609 8611 8612 8613</indices>
+		<influence fap="17" type="RaisedCosInfluenceSph" weight="0" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="8695" name="2.2">
+		<indices>3431 3878 4311 4328 8676 8678 8695 8698 8700 8716 8718 8719 8721 8723 8729 8734</indices>
+		<influence fap="3" type="RaisedCosInfluenceWaveY" weight="0.25" />
+		<influence fap="16" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="8725" name="2.3">
+		<indices>3386 3387 3388 3389 3390 3391 3868 3869 3870 3872 3879 3959 3960 4293 4297 4298 4299 4300 4301 4467 4469 4470 4471 4472 4474 4475 4536 4540 4541 4542 7573 8264 8265 8266 8610 8613 8642 8645 8685 8686 8690 8691 8693 8701 8703 8706 8709 8722 8725 8726 8730 8733</indices>
+		<influence fap="4" type="RaisedCosInfluenceWaveY" weight="0.33" />
+		<influence fap="15" type="RaisedCosInfluenceSph" weight="-0.1" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="7629" name="2.4">
+		<indices>3412 3413 4228 4232 4233 4234 4235 7628 7629 7635 8056 8689 8704</indices>
+		<influence fap="11" type="RaisedCosInfluenceSph" weight="0.25" />
+		<influence fap="5" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4259" name="2.5">
+		<indices>4258 4259 4260 4266 7614 8714</indices>
+		<influence fap="12" type="RaisedCosInfluenceSph" weight="0.3" />
+		<influence fap="6" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="8195" name="2.6">
+		<indices>8195 8677 8680 8683 8684 8696 8713 8715 8717 8732</indices>
+		<influence fap="7" type="RaisedCosInfluenceSph" weight="0.15" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="8699" name="2.7">
+		<indices>3383 3436 4262 4275 8675 8682 8687 8692 8699 8702 8711</indices>
+		<influence fap="8" type="RaisedCosInfluenceSph" weight="0.15" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="8697" name="2.8">
+		<indices>3841 3871 3875 3877 4291 4294 4473 7634 7635 8689 8694 8697 8707 8712 8731</indices>
+		<influence fap="9" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="8708" name="2.9">
+		<indices>3382 3851 4265 4266 4267 4271 4272 4274 7678 8632 8679 8681 8688 8705 8708 8710 8720 8724 8727 8728</indices>
+		<influence fap="10" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="2324" name="3.1">
+		<indices>2324</indices>
+		<influence fap="18" type="RaisedCosInfluenceWaveX" weight="0.15" />
+		<influence fap="18" type="RaisedCosInfluenceWaveY" weight="0.05" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="5674" name="3.2">
+		<indices>5674</indices>
+		<influence fap="19" type="RaisedCosInfluenceWaveY" weight="0.15" />
+		<influence fap="19" type="RaisedCosInfluenceWaveX" weight="0.2" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="5769" name="3.3">
+		<indices>5769</indices>
+		<influence fap="20" type="RaisedCosInfluenceSph" weight="0.1" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="5732" name="3.4">
+		<indices>5732</indices>
+		<influence fap="21" type="RaisedCosInfluenceSph" weight="0.1" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4003" name="3.5">
+		<indices>4003</indices>
+		<influence fap="24" type="RaisedCosInfluenceWaveX" weight="0" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4441" name="4.1">
+		<indices>4441</indices>
+		<influence fap="30" type="RaisedCosInfluenceSph" weight="0.9" />
+		<influence fap="36" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4536" name="4.2">
+		<indices>4536</indices>
+		<influence fap="31" type="RaisedCosInfluenceSph" weight="0.9" />
+		<influence fap="37" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4598" name="4.3">
+		<indices>4598</indices>
+		<influence fap="32" type="RaisedCosInfluenceSph" weight="0.15" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4785" name="4.4">
+		<indices>4785</indices>
+		<influence fap="33" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4852" name="4.5">
+		<indices>4852</indices>
+		<influence fap="34" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4753" name="4.6">
+		<indices>4753</indices>
+		<influence fap="35" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="7175" name="5.1">
+		<indices>1094 1095 1679 1680 3367 3392 3393 3394 3880 6663 7175 7562 8051 8052 8055 8193 8196</indices>
+		<influence fap="38" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="3160" name="5.2">
+		<indices>2755 2756 3159 3160 3161 3162 3259 3260 3261 3634 3637 4134 6384 6389 6390 7926 8015 8175 8347 8450 8592</indices>
+		<influence fap="39" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="2950" name="5.3">
+		<indices>2950</indices>
+		<influence fap="40" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="2955" name="5.4">
+		<indices>2955</indices>
+		<influence fap="41" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4483" name="8.1">
+		<indices>3431 3878 4311 4329 4335 4482 4483 4484 4492 7662 8651 8653 8661 8676 8678 8695 8700 8716 8719 8721 8723 8729 8734</indices>
+		<influence fap="50" type="RaisedCosInfluenceSph" weight="0.35" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="3391" name="8.2">
+		<indices>3391 3870 3872 3879 3959 3960 4298 4299 4300 4301 4469 4470 4471 4472 4474 4475 7573 8264 8266 8610 8645 8685 8686 8690 8691 8693 8701 8703 8706 8709 8722 8725 8726 8730 8733</indices>
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="6784" name="8.3">
+		<indices>2696 2697 2698 2749 2750 2751 3366 3368 3370 3371 3372 3375 3828 3830 3839 3840 3885 4229 4230 4231 6784 7474 7627 7629 8191 8192 8197</indices>
+		<influence fap="58" type="RaisedCosInfluenceSph" weight="0.4" />
+		<influence fap="52" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="8176" name="8.4">
+		<indices>2629 2630 2631 3261 3852 3854 3920 3921 3922 3931 3933 4138 4139 4140 4141 4142 4258 4259 4305 4477 7614 7677 8176 8598 8631 8632</indices>
+		<influence fap="59" type="RaisedCosInfluenceSph" weight="0.3" />
+		<influence fap="53" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="3379" name="8.5">
+		<indices>3374 3376 3377 3378 3379 3380 3381 3412 3893 3894 3895 3896 3900 4236 4328 4334 4476 4489 8195 8621 8646 8677 8680 8683 8684 8696 8704 8713 8715 8717 8718 8732</indices>
+		<influence fap="54" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4315" name="8.6">
+		<indices>3383 3436 3856 3857 3858 3932 3957 4260 4262 4263 4264 4275 4310 4312 4313 4314 4315 4316 4481 4485 4486 8617 8618 8641 8675 8682 8687 8692 8698 8699 8702 8711</indices>
+		<influence fap="55" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="3877" name="8.7">
+		<indices>2691 2692 2693 3829 3841 3871 3875 3876 3877 4287 4291 4292 4294 4473 7633 7634 7635 8689 8694 8697 8707 8712 8731</indices>
+		<influence fap="57" type="RaisedCosInfluenceSph" weight="0.1" />
+	</fdp>
+	<fdp affects="kondor_zoltan_with_mouth_1.obj" index="4271" name="8.8">
+		<indices>3382 3848 3849 3850 3851 3855 4261 4265 4266 4267 4270 4271 4272 4273 4274 4463 7678 8679 8681 8688 8705 8708 8710 8720 8724 8727 8728</indices>
+		<influence fap="58" type="RaisedCosInfluenceSph" weight="0.15" />
+	</fdp>
+</xfdp>
