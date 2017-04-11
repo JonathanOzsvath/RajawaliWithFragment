@@ -49,12 +49,18 @@ public class MyLoaderOBJ extends MyAMeshLoader {
 
     public MyLoaderOBJ.ObjIndexData currObjIndexData;
     public ArrayList objIndices;
-    public ArrayList vertices;
+    public ArrayList verticesAList;
     public ArrayList texCoords;
-    public ArrayList normals;
+    public ArrayList normalsAList;
     public MyLoaderOBJ.MaterialLib matLib;
     public String currentMaterialName;
     public HashMap groups;
+
+    public float[] vertices;
+    public float[] textureCoords;
+    public float[] normalsList;
+    public float[] colors;
+    public int[] indeces;
 
     private static Field mParent;
 
@@ -93,9 +99,9 @@ public class MyLoaderOBJ extends MyAMeshLoader {
 
         currObjIndexData = new MyLoaderOBJ.ObjIndexData(new Object3D(generateObjectName()));
         objIndices = new ArrayList();
-        vertices = new ArrayList();
+        verticesAList = new ArrayList();
         texCoords = new ArrayList();
-        normals = new ArrayList();
+        normalsAList = new ArrayList();
         matLib = new MyLoaderOBJ.MaterialLib();
         currentMaterialName = null;
         groups = new HashMap();
@@ -136,47 +142,47 @@ public class MyLoaderOBJ extends MyAMeshLoader {
         Object3D currentGroup = this.mRootObject;
         this.mRootObject.setName("default");
 
-        int i;
+        int countNumObjects;
         int i1;
         int tme;
         try {
-            String var33;
-            while((var33 = buffer.readLine()) != null) {
-                if(var33.length() != 0 && var33.charAt(0) != 35) {
-                    StringTokenizer numObjects = new StringTokenizer(var33, " ");
-                    i = numObjects.countTokens();
-                    if(i != 0) {
+            String lines;
+            while((lines = buffer.readLine()) != null) {
+                if(lines.length() != 0 && lines.charAt(0) != 35) {
+                    StringTokenizer numObjects = new StringTokenizer(lines, " ");
+                    countNumObjects = numObjects.countTokens();
+                    if(countNumObjects != 0) {
                         String group = numObjects.nextToken();
                         if(group.equals("v")) {
-                            vertices.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
-                            vertices.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
-                            vertices.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
+                            verticesAList.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
+                            verticesAList.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
+                            verticesAList.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
                         } else if(group.equals("f")) {
                             currentObjHasFaces = true;
-                            boolean var39 = i == 5;
+                            boolean var39 = countNumObjects == 5;
                             int[] var40 = new int[4];
                             int[] var42 = new int[4];
                             int[] var44 = new int[4];
-                            boolean var46 = var33.indexOf("//") > -1;
+                            boolean var46 = lines.indexOf("//") > -1;
                             if(var46) {
-                                var33 = var33.replace("//", "/");
+                                lines = lines.replace("//", "/");
                             }
 
-                            numObjects = new StringTokenizer(var33);
+                            numObjects = new StringTokenizer(lines);
                             numObjects.nextToken();
                             StringTokenizer aIndices = new StringTokenizer(numObjects.nextToken(), "/");
                             tme = aIndices.countTokens();
                             boolean ni = tme >= 2 && !var46;
                             boolean e = tme == 3 || tme == 2 && var46;
 
-                            for(int indices = 1; indices < i; ++indices) {
+                            for(int indices = 1; indices < countNumObjects; ++indices) {
                                 if(indices > 1) {
                                     aIndices = new StringTokenizer(numObjects.nextToken(), "/");
                                 }
 
                                 int idx = Integer.parseInt(aIndices.nextToken());
                                 if(idx < 0) {
-                                    idx += vertices.size() / 3;
+                                    idx += verticesAList.size() / 3;
                                 } else {
                                     --idx;
                                 }
@@ -205,7 +211,7 @@ public class MyLoaderOBJ extends MyAMeshLoader {
                                 if(e) {
                                     idx = Integer.parseInt(aIndices.nextToken());
                                     if(idx < 0) {
-                                        idx += normals.size() / 3;
+                                        idx += normalsAList.size() / 3;
                                     } else {
                                         --idx;
                                     }
@@ -232,9 +238,9 @@ public class MyLoaderOBJ extends MyAMeshLoader {
                             texCoords.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
                             texCoords.add(Float.valueOf(1.0F - Float.parseFloat(numObjects.nextToken())));
                         } else if(group.equals("vn")) {
-                            normals.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
-                            normals.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
-                            normals.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
+                            normalsAList.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
+                            normalsAList.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
+                            normalsAList.add(Float.valueOf(Float.parseFloat(numObjects.nextToken())));
                         } else if(!group.equals("g")) {
                             String var38;
                             if(group.equals("o")) {
@@ -328,11 +334,11 @@ public class MyLoaderOBJ extends MyAMeshLoader {
         int tme;
         for(i = 0; i < var34; ++i) {
             MyLoaderOBJ.ObjIndexData var36 = (MyLoaderOBJ.ObjIndexData)objIndices.get(i);
-            float[] var41 = new float[var36.vertexIndices.size() * 3];
-            float[] var43 = new float[var36.texCoordIndices.size() * 2];
-            float[] var45 = new float[var36.normalIndices.size() * 3];
-            float[] var47 = new float[var36.colorIndices.size() * 4];
-            int[] var48 = new int[var36.vertexIndices.size()];
+            vertices = new float[var36.vertexIndices.size() * 3];
+            textureCoords = new float[var36.texCoordIndices.size() * 2];
+            normalsList = new float[var36.normalIndices.size() * 3];
+            colors = new float[var36.colorIndices.size() * 4];
+            indeces = new int[var36.vertexIndices.size()];
 
             int var49;
             for(i1 = 0; i1 < var36.vertexIndices.size(); ++i1) {
@@ -340,10 +346,10 @@ public class MyLoaderOBJ extends MyAMeshLoader {
                 var49 = i1 * 3;
 
                 try {
-                    var41[var49] = ((Float)vertices.get(tme)).floatValue();
-                    var41[var49 + 1] = ((Float)vertices.get(tme + 1)).floatValue();
-                    var41[var49 + 2] = ((Float)vertices.get(tme + 2)).floatValue();
-                    var48[i1] = i1;
+                    vertices[var49] = ((Float) verticesAList.get(tme)).floatValue();
+                    vertices[var49 + 1] = ((Float) verticesAList.get(tme + 1)).floatValue();
+                    vertices[var49 + 2] = ((Float) verticesAList.get(tme + 2)).floatValue();
+                    indeces[i1] = i1;
                 } catch (ArrayIndexOutOfBoundsException var30) {
                     RajLog.d("Obj array index out of bounds: " + var49 + ", " + tme);
                 }
@@ -353,34 +359,34 @@ public class MyLoaderOBJ extends MyAMeshLoader {
                 for(i1 = 0; i1 < var36.texCoordIndices.size(); ++i1) {
                     tme = ((Integer)var36.texCoordIndices.get(i1)).intValue() * 2;
                     var49 = i1 * 2;
-                    var43[var49] = ((Float)texCoords.get(tme)).floatValue();
-                    var43[var49 + 1] = ((Float)texCoords.get(tme + 1)).floatValue();
+                    textureCoords[var49] = ((Float)texCoords.get(tme)).floatValue();
+                    textureCoords[var49 + 1] = ((Float)texCoords.get(tme + 1)).floatValue();
                 }
             }
 
             for(i1 = 0; i1 < var36.colorIndices.size(); ++i1) {
                 tme = ((Integer)var36.colorIndices.get(i1)).intValue() * 4;
                 var49 = i1 * 4;
-                var43[var49] = ((Float)texCoords.get(tme)).floatValue();
-                var43[var49 + 1] = ((Float)texCoords.get(tme + 1)).floatValue();
-                var43[var49 + 2] = ((Float)texCoords.get(tme + 2)).floatValue();
-                var43[var49 + 3] = ((Float)texCoords.get(tme + 3)).floatValue();
+                textureCoords[var49] = ((Float)texCoords.get(tme)).floatValue();
+                textureCoords[var49 + 1] = ((Float)texCoords.get(tme + 1)).floatValue();
+                textureCoords[var49 + 2] = ((Float)texCoords.get(tme + 2)).floatValue();
+                textureCoords[var49 + 3] = ((Float)texCoords.get(tme + 3)).floatValue();
             }
 
             for(i1 = 0; i1 < var36.normalIndices.size(); ++i1) {
                 tme = ((Integer)var36.normalIndices.get(i1)).intValue() * 3;
                 var49 = i1 * 3;
-                if(normals.size() == 0) {
-                    RajLog.e("[" + this.getClass().getName() + "] There are no normals specified for this model. Please re-export with normals.");
-                    throw new ParsingException("[" + this.getClass().getName() + "] There are no normals specified for this model. Please re-export with normals.");
+                if(this.normalsAList.size() == 0) {
+                    RajLog.e("[" + this.getClass().getName() + "] There are no normalsAList specified for this model. Please re-export with normalsAList.");
+                    throw new ParsingException("[" + this.getClass().getName() + "] There are no normalsAList specified for this model. Please re-export with normalsAList.");
                 }
 
-                var45[var49] = ((Float)normals.get(tme)).floatValue();
-                var45[var49 + 1] = ((Float)normals.get(tme + 1)).floatValue();
-                var45[var49 + 2] = ((Float)normals.get(tme + 2)).floatValue();
+                normalsList[var49] = ((Float) this.normalsAList.get(tme)).floatValue();
+                normalsList[var49 + 1] = ((Float) this.normalsAList.get(tme + 1)).floatValue();
+                normalsList[var49 + 2] = ((Float) this.normalsAList.get(tme + 2)).floatValue();
             }
 
-            var36.targetObj.setData(var41, var45, var43, var47, var48, false);
+            var36.targetObj.setData(vertices, normalsList, textureCoords, colors, indeces, false);
 
             if(mat) {
                 try {
@@ -689,7 +695,7 @@ public class MyLoaderOBJ extends MyAMeshLoader {
         }
     }
 
-    protected class ObjIndexData {
+    public class ObjIndexData {
         public Object3D targetObj;
         public ArrayList<Integer> vertexIndices;
         public ArrayList<Integer> texCoordIndices;

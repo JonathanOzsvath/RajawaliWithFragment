@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<xfdp>
+	<head>
+		<file version="0.2" />
+		<fapu ENS0="1.933096" ES0="2.26242" IRISD0="1.292736" MNS0="1.54888" MW0="1.9148" />
+		<translation x="0" y="-1" z="-659" />
+		<rotation axis_angle="0.407589" axis_x="-0.999632" axis_y="-0.0154467" axis_z="0.0223226" />
+	</head>
+	<fdp affects="yoda_with_mouth.obj" index="7386" name="2.1">
+		<indices>398 399 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 1864 1865 1866 1867 3038 3513 3630 3755 4147 4205 4206 4209 4267 4275 4333 4405 4537 4593 4942 5140 5284 5407 5457 5530 5598 5604 5638 5668 5720 5793 5801 5852 5923 6100 6162 6727 7373 7377 7378 7379 7381 7382 7384 7385 7386 7387 7388</indices>
+		<influence fap="2" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="4205" name="2.10">
+		<indices>400 401 402 404 4147 4205 4333 4405 4593 5457 5638 7378 7381</indices>
+		<influence fap="17" type="RaisedCosInfluenceSph" weight="0" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="7371" name="2.2">
+		<indices>376 377 1857 1858 2850 3153 3288 3533 4601 6512 6584 6891 7359 7371</indices>
+		<influence fap="3" type="RaisedCosInfluenceWaveY" weight="0.25" />
+		<influence fap="16" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="7372" name="2.3">
+		<indices>389 391 394 395 396 397 4270 5046 5064 5471 5885 6641 7372 7374 7378</indices>
+		<influence fap="4" type="RaisedCosInfluenceWaveY" weight="0.33" />
+		<influence fap="15" type="RaisedCosInfluenceSph" weight="-0.1" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="3012" name="2.4">
+		<indices>373 3012 5962 7354 7356 7369</indices>
+		<influence fap="11" type="RaisedCosInfluenceSph" weight="0.25" />
+		<influence fap="5" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="6172" name="2.5">
+		<indices>3174 6172 7363 7366 7375</indices>
+		<influence fap="12" type="RaisedCosInfluenceSph" weight="0.3" />
+		<influence fap="6" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="379" name="2.6">
+		<indices>379 3012 6829 7356 7362</indices>
+		<influence fap="7" type="RaisedCosInfluenceSph" weight="0.15" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="7365" name="2.7">
+		<indices>1860 3174 3641 7363 7365</indices>
+		<influence fap="8" type="RaisedCosInfluenceSph" weight="0.15" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="6492" name="2.8">
+		<indices>387 388 394 396 5348 5457 5615 5885 6183 6432 6492 6641 7369 7370 7373</indices>
+		<influence fap="9" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="5188" name="2.9">
+		<indices>392 393 395 397 4212 4270 4405 5118 5188 5351 6590 7375 7376 7377</indices>
+		<influence fap="10" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="4123" name="3.1">
+		<indices>4123</indices>
+		<influence fap="18" type="RaisedCosInfluenceWaveX" weight="0.15" />
+		<influence fap="18" type="RaisedCosInfluenceWaveY" weight="0.05" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="2145" name="3.2">
+		<indices>2145</indices>
+		<influence fap="19" type="RaisedCosInfluenceWaveY" weight="0.15" />
+		<influence fap="19" type="RaisedCosInfluenceWaveX" weight="0.2" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="2212" name="3.3">
+		<indices>2212</indices>
+		<influence fap="20" type="RaisedCosInfluenceSph" weight="0.1" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="1245" name="3.4">
+		<indices>1245</indices>
+		<influence fap="21" type="RaisedCosInfluenceSph" weight="0.1" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="7982" name="3.5">
+		<indices>7982</indices>
+		<influence fap="24" type="RaisedCosInfluenceWaveX" weight="0" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="3214" name="4.1">
+		<indices>3214</indices>
+		<influence fap="30" type="RaisedCosInfluenceSph" weight="0.9" />
+		<influence fap="36" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="2247" name="4.2">
+		<indices>2247</indices>
+		<influence fap="31" type="RaisedCosInfluenceSph" weight="0.9" />
+		<influence fap="37" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="1478" name="4.3">
+		<indices>1478</indices>
+		<influence fap="32" type="RaisedCosInfluenceSph" weight="0.15" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="1865" name="4.4">
+		<indices>1865</indices>
+		<influence fap="33" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="1992" name="4.5">
+		<indices>1992</indices>
+		<influence fap="34" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="3249" name="4.6">
+		<indices>3249</indices>
+		<influence fap="35" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="7103" name="5.1">
+		<indices>96 97 99 101 103 1629 1630 4153 4269 4283 4399 4523 4893 6459 7103</indices>
+		<influence fap="38" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="6991" name="5.2">
+		<indices>3 4 9 12 13 1434 1436 3033 3113 3134 3193 3267 3863 5995 6991</indices>
+		<influence fap="39" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="2987" name="5.3">
+		<indices>2987</indices>
+		<influence fap="40" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="2956" name="5.4">
+		<indices>2956</indices>
+		<influence fap="41" type="RaisedCosInfluenceSph" weight="0.3" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="7358" name="8.1">
+		<indices>376 377 1849 1850 1857 1858 3039 3153 3288 3533 3535 6041 6437 6452 6512 6584 6642 6891 6908 7358 7359 7371</indices>
+		<influence fap="50" type="RaisedCosInfluenceSph" weight="0.35" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="5046" name="8.2">
+		<indices>389 391 394 395 5046 5064 5471 6641 7372 7374</indices>
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="6962" name="8.3">
+		<indices>368 369 370 371 373 386 1848 2813 2814 2878 2899 3012 3550 3574 3785 5962 6335 6949 6962 7350 7351 7352 7353 7354</indices>
+		<influence fap="58" type="RaisedCosInfluenceSph" weight="0.4" />
+		<influence fap="52" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="7367" name="8.4">
+		<indices>383 384 385 390 1856 1861 1862 2824 3174 3434 3502 3514 3710 4349 4542 5285 5403 5476 5943 6172 6285 7002 7364 7366 7367 7368</indices>
+		<influence fap="59" type="RaisedCosInfluenceSph" weight="0.3" />
+		<influence fap="53" type="RaisedCosInfluenceSph" weight="0.2" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="3121" name="8.5">
+		<indices>372 374 375 379 1847 1859 2850 3012 3039 3121 3196 3533 3550 3635 6452 6482 6653 6705 6829 7355 7356 7357 7362</indices>
+		<influence fap="54" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="6389" name="8.6">
+		<indices>378 380 381 382 1855 1860 3153 3174 3372 3385 3456 3512 3641 3710 4601 6155 6389 6437 6642 7360 7361 7363 7365</indices>
+		<influence fap="55" type="RaisedCosInfluenceSph" weight="0.25" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="6432" name="8.7">
+		<indices>387 388 396 5348 5457 5615 5885 6183 6335 6432 6492 7369 7370 7373</indices>
+		<influence fap="57" type="RaisedCosInfluenceSph" weight="0.1" />
+	</fdp>
+	<fdp affects="yoda_with_mouth.obj" index="4212" name="8.8">
+		<indices>392 393 395 397 4212 4270 4405 5118 5188 5351 6590 7375 7376 7377</indices>
+		<influence fap="58" type="RaisedCosInfluenceSph" weight="0.15" />
+	</fdp>
+</xfdp>

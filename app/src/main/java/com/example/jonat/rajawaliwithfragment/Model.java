@@ -2,14 +2,11 @@ package com.example.jonat.rajawaliwithfragment;
 
 import android.content.Context;
 
-import org.rajawali3d.math.vector.Vector3;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jonat on 2017. 04. 07..
@@ -18,17 +15,19 @@ import java.util.List;
 public class Model {
 
     private ArrayList<Float> vertices;
+    private ArrayList<Float> normals;
     private Context context;
 
     public Model(Context context) {
         this.context = context;
         vertices = new ArrayList<>();
+        normals = new ArrayList<>();
 
         readInVertices();
     }
 
     public void readInVertices(){
-        InputStream inputStream = context.getResources().openRawResource(R.raw.kondor_zoltan_with_mouth_1_obj);
+        InputStream inputStream = context.getResources().openRawResource(R.raw.yoda_with_mouth_obj);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
         String line;
@@ -39,6 +38,11 @@ public class Model {
                     vertices.add(Float.parseFloat(tmp[1]));
                     vertices.add(Float.parseFloat(tmp[2]));
                     vertices.add(Float.parseFloat(tmp[3]));
+                } else if(line.startsWith("vn ")){
+                    String[] tmp = line.split(" ");
+                    normals.add(Float.parseFloat(tmp[1]));
+                    normals.add(Float.parseFloat(tmp[2]));
+                    normals.add(Float.parseFloat(tmp[3]));
                 } else {
                     continue;
                 }
