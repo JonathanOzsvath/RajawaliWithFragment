@@ -71,7 +71,7 @@ public class FapUtil {
 
     public void loadFdp() {
         try {
-            InputStream is = context.getResources().openRawResource(R.raw.fdp_yoda);
+            InputStream is = context.getResources().openRawResource(R.raw.fdp);
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -88,17 +88,19 @@ public class FapUtil {
 
             for (int i = 0; i < fdpElements.getLength(); i++) {
                 NodeList childNodes = fdpElements.item(i).getChildNodes();
-
                 List<Integer> indeces = new ArrayList<>();
-
                 String[] splitChildNodes;
+
                 for (int j = 0; j < childNodes.getLength(); j++) {
                     Node item = childNodes.item(j);
                     if (item.getNodeName().toString().equals("indices")) {
                         splitChildNodes = item.getFirstChild().getNodeValue().split(" ");
 
-                        for (String s : splitChildNodes) {
+                        /*for (String s : splitChildNodes) {
                             indeces.add(Integer.parseInt(s));
+                        }*/
+                        for (int k = 0; k < splitChildNodes.length - 1; k++) {
+                            indeces.add(Integer.parseInt(splitChildNodes[k]));
                         }
                     } else if (item.getNodeName().toString().equals("influence")) {
                         Node index = item.getAttributes().getNamedItem("fap");
@@ -282,7 +284,7 @@ public class FapUtil {
     }
 
     public void loadFaps() {
-        InputStream in = context.getResources().openRawResource(R.raw.newfap);
+        InputStream in = context.getResources().openRawResource(R.raw.anger);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
         String line;
         boolean init = true;

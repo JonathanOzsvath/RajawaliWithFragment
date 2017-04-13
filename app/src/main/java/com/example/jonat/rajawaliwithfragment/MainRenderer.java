@@ -13,8 +13,15 @@ import org.rajawali3d.materials.methods.DiffuseMethod;
 import org.rajawali3d.primitives.Sphere;
 import org.rajawali3d.renderer.Renderer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import FapUtils.FapUtil;
 import Loader.MyLoaderOBJ;
@@ -29,16 +36,18 @@ public class MainRenderer extends Renderer {
     private Sphere sphere1;
     private Sphere sphere2;
     private Object3D mObjectGroup;
-    private Object3D mObjectGroup2;
 
     private FapUtil fapUtil;
     private Model model;
+
+    private Task task;
+
     MyLoaderOBJ objParser;
+
+    private int count = 0;
 
     private double[] light1Position = new double[]{-10, 0, 15};
     private double[] light2Position = new double[]{10, 0, 15};
-
-    private int count = 0;
 
     private int iter = 0;
 
@@ -78,7 +87,7 @@ public class MainRenderer extends Renderer {
         sphere2.setMaterial(material);
         getCurrentScene().addChild(sphere2);
 
-        objParser = new MyLoaderOBJ(mContext.getResources(), mTextureManager, R.raw.yoda_with_mouth_obj);
+        objParser = new MyLoaderOBJ(mContext.getResources(), mTextureManager, R.raw.kondor_zoltan_with_mouth_1_obj);
         try {
             objParser.parse();
             mObjectGroup = objParser.getParsedObject();
@@ -95,6 +104,8 @@ public class MainRenderer extends Renderer {
         getCurrentScene().replaceAndSwitchCamera(getCurrentCamera(), arcball);
 
         preCalculateDistance();
+
+        task = new Task();
     }
 
     @Override
@@ -105,71 +116,115 @@ public class MainRenderer extends Renderer {
     public void onTouchEvent(MotionEvent motionEvent) {
     }
 
+//    final Thread thread = new Thread(){
+//        @Override
+//        public void run() {
+//            update();
+//        }
+//    };
+
+    class Task implements Runnable {
+
+        @Override
+        public void run() {
+
+//            try {
+//                Thread.sleep(20);
+
+                if (fapUtil.getnFaps() != 0) {
+
+                    StringBuilder builder = new StringBuilder();
+                    float[] vertices = new float[mObjectGroup.getGeometry().getNumVertices() * 3];
+                    ArrayList<Float> tmpVertices = (ArrayList<Float>) objParser.verticesAList.clone();
+
+                    if (iter < fapUtil.getnFaps()) {
+                        int index = 0;
+                        for (int i = 0; i < 68; i++) {
+                            if (fapUtil.getMask().get(iter).get(i) == 1) {
+                                if (fapUtil.getFdps().containsKey(i)) {
+                                    for (int j = 0; j < fapUtil.getFdps().get(i).size(); j++) {
+                                        for (int k = 0; k < fapUtil.getFdps().get(i).get(j).getIndeces().size(); k++) {
+                                            int bindex = fapUtil.getFdps().get(i).get(j).getIndeces().get(k);
+                                            float fapuMap = (float) fapUtil.getFapuMap().get(i);
+                                            float delta = (fapUtil.getFaps().get(iter).get(index)) *
+                                                    (fapUtil.getFdps().get(i).get(j).getWeights().get(k) * fapuMap);
+
+                                            tmpVertices.set(bindex * 3, tmpVertices.get(bindex * 3) + delta * fapUtil.getFapAxis().get(i)[0]);
+                                            tmpVertices.set(bindex * 3 + 1, tmpVertices.get(bindex * 3 + 1) + delta * fapUtil.getFapAxis().get(i)[1]);
+                                            tmpVertices.set(bindex * 3 + 2, tmpVertices.get(bindex * 3 + 2) + delta * fapUtil.getFapAxis().get(i)[2]);
+                                        /*builder.append("i= " + i + " j= " + j + " k= " + k + "\n");
+                                        builder.append("index= " + index + " iter= " + iter+ "\n");
+                                        builder.append("bindex= " + bindex + " delta= " + delta+ "\n");
+                                        builder.append(tmpVertices.get(bindex * 3) + " " + tmpVertices.get(bindex * 3 + 1) + " " + tmpVertices.get(bindex * 3 + 2)+ "\n");*/
+                                        }
+                                    }
+                                }
+                                index++;
+                            }
+                        }
+//                    writeToFile(builder.toString());
+
+                        iter++;
+                        for (int k = 0; k < objParser.currObjIndexData.vertexIndices.size(); k++) {
+                            int tme = ((Integer) objParser.currObjIndexData.vertexIndices.get(k)).intValue() * 3;
+                            vertices[k * 3] = tmpVertices.get(tme);
+                            vertices[k * 3 + 1] = tmpVertices.get(tme + 1);
+                            vertices[k * 3 + 2] = tmpVertices.get(tme + 2);
+                        }
+                        mObjectGroup.getGeometry().setData(vertices, objParser.normalsList, objParser.textureCoords, objParser.colors, objParser.indeces, false);
+                        mObjectGroup.reload();
+                    }
+                    if (iter == fapUtil.getnFaps()) {
+                        fapUtil.setnFaps(0);
+                    }
+                }
+
+            /*} catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+        }
+    }
+
     @Override
     protected void onRender(long ellapsedRealtime, double deltaTime) {
         super.onRender(ellapsedRealtime, deltaTime);
 
-        if (fapUtil.getnFaps() != 0) {
+        /*try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+        task.run();
+//        update();
+    }
 
-            count++;
-            float[] vertices = new float[mObjectGroup.getGeometry().getNumVertices() * 3];
-            ArrayList<Float> tmpVertices = (ArrayList<Float>) objParser.verticesAList.clone();
+    public void writeToFile(String s) {
+        File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Mary");
+        if (!cacheDir.exists())
+            cacheDir.mkdirs();
 
-            if (count % 2 == 1) {
-                if (iter < fapUtil.getnFaps()) {
-                    int index = 0;
-                    List affected = new ArrayList();
-                    int db = 0;
-                    for (int i = 0; i < 68; i++) {
-                        if (fapUtil.getMask().get(iter).get(i) == 1) {
-                            if (fapUtil.getFdps().containsKey(i)) {
-                                for (int j = 0; j < fapUtil.getFdps().get(i).size(); j++) {
-                                    for (int k = 0; k < fapUtil.getFdps().get(i).get(j).getIndeces().size(); k++) {
-                                        int bindex = fapUtil.getFdps().get(i).get(j).getIndeces().get(k);
-                                        float fapuMap = (float) fapUtil.getFapuMap().get(i);
-                                        float delta = (fapUtil.getFaps().get(iter).get(index)) *
-                                                (fapUtil.getFdps().get(i).get(j).getWeights().get(k) * fapuMap);
-
-                                        tmpVertices.set(bindex * 3, tmpVertices.get(bindex * 3) + delta * fapUtil.getFapAxis().get(i)[0]);
-                                        tmpVertices.set(bindex * 3 + 1, tmpVertices.get(bindex * 3 + 1) + delta * fapUtil.getFapAxis().get(i)[1]);
-                                        tmpVertices.set(bindex * 3 + 2, tmpVertices.get(bindex * 3 + 2) + delta * fapUtil.getFapAxis().get(i)[2]);
-                                    }
-                                }
-                            }
-                            index++;
-
-                        }
-                    }
-                    iter++;
-                    for (int k = 0; k < objParser.currObjIndexData.vertexIndices.size(); k++) {
-                        int tme = ((Integer) objParser.currObjIndexData.vertexIndices.get(k)).intValue() * 3;
-                        vertices[k * 3] = tmpVertices.get(tme);
-                        vertices[k * 3 + 1] = tmpVertices.get(tme + 1);
-                        vertices[k * 3 + 2] = tmpVertices.get(tme + 2);
-                    }
-                    mObjectGroup.getGeometry().setData(vertices, objParser.normalsList, objParser.textureCoords, objParser.colors, objParser.indeces, false);
-                    mObjectGroup.reload();
-                }
-            }else {
-                for (int k = 0; k < objParser.currObjIndexData.vertexIndices.size(); k++) {
-                    int tme = ((Integer) objParser.currObjIndexData.vertexIndices.get(k)).intValue() * 3;
-                    vertices[k * 3] = tmpVertices.get(tme);
-                    vertices[k * 3 + 1] = tmpVertices.get(tme + 1);
-                    vertices[k * 3 + 2] = tmpVertices.get(tme + 2);
-                }
-                mObjectGroup.getGeometry().setData(vertices, objParser.normalsList, objParser.textureCoords, objParser.colors, objParser.indeces, false);
-                mObjectGroup.reload();
-            }
-
-            iter = 0;
-            fapUtil.setnFaps(0);
+        try {
+            File f = new File(cacheDir, "log.txt");
+            FileOutputStream fileOutputStream = new FileOutputStream(f);
+            OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream);
+            writer.append(s);
+            writer.close();
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    public void update() {
 
+    }
 
     public void play() {
         fapUtil.loadFaps();
+        count++;
+        new Thread(task).start();
+        iter = 0;
     }
 
     public void preCalculateDistance() {
@@ -193,63 +248,63 @@ public class MainRenderer extends Renderer {
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
                 // x
-                val = calculateDistanceXYZ( model.getVertices().get(index1 *3),
-                         model.getVertices().get(index2*3));
+                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3),
+                        model.getVertices().get(index2 * 3));
                 if (val > maxDist)
                     maxDist = val;
             }
 
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
-                val = calculateDistanceXYZ( model.getVertices().get(index1*3),
-                         model.getVertices().get(index2*3));
+                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3),
+                        model.getVertices().get(index2 * 3));
                 influence.getWeights().add((float) ((1 + Math.cos(Math.PI * val / maxDist)) * influence.getWeight()));
             }
         } else if (influence.getType().equals("RaisedCosInfluenceWaveY")) {
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
                 // y
-                val = calculateDistanceXYZ( model.getVertices().get(index1*3+1),
-                         model.getVertices().get(index2*3+1));
+                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3 + 1),
+                        model.getVertices().get(index2 * 3 + 1));
                 if (val > maxDist)
                     maxDist = val;
             }
 
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
-                val = calculateDistanceXYZ( model.getVertices().get(index1*3+1),
-                        model.getVertices().get(index2*3+1));
+                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3 + 1),
+                        model.getVertices().get(index2 * 3 + 1));
                 influence.getWeights().add((float) ((1 + Math.cos(Math.PI * val / maxDist)) * influence.getWeight()));
             }
         } else if (influence.getType().equals("RaisedCosInfluenceWaveZ")) {
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
                 // z
-                val = calculateDistanceXYZ( model.getVertices().get(index1*3+2),
-                        model.getVertices().get(index2*3+2));
+                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3 + 2),
+                        model.getVertices().get(index2 * 3 + 2));
                 if (val > maxDist)
                     maxDist = val;
             }
 
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
-                val = calculateDistanceXYZ(model.getVertices().get(index1*3+2),
-                        model.getVertices().get(index2*3+2));
+                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3 + 2),
+                        model.getVertices().get(index2 * 3 + 2));
                 influence.getWeights().add((float) ((1 + Math.cos(Math.PI * val / maxDist)) * influence.getWeight()));
             }
         } else if (influence.getType().equals("RaisedCosInfluenceSph")) {
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
-                val = calculateDistanceSph( model.getVertices().get(index1*3), model.getVertices().get(index1*3+1), model.getVertices().get(index1*3+2),
-                        model.getVertices().get(index2*3), model.getVertices().get(index2*3+1), model.getVertices().get(index2*3+2));
+                val = calculateDistanceSph(model.getVertices().get(index1 * 3), model.getVertices().get(index1 * 3 + 1), model.getVertices().get(index1 * 3 + 2),
+                        model.getVertices().get(index2 * 3), model.getVertices().get(index2 * 3 + 1), model.getVertices().get(index2 * 3 + 2));
                 if (val > maxDist)
                     maxDist = val;
             }
 
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
-                val = calculateDistanceSph( model.getVertices().get(index1*3), model.getVertices().get(index1*3+1), model.getVertices().get(index1*3+2),
-                        model.getVertices().get(index2*3),  model.getVertices().get(index2*3+1), model.getVertices().get(index2*3+2));
+                val = calculateDistanceSph(model.getVertices().get(index1 * 3), model.getVertices().get(index1 * 3 + 1), model.getVertices().get(index1 * 3 + 2),
+                        model.getVertices().get(index2 * 3), model.getVertices().get(index2 * 3 + 1), model.getVertices().get(index2 * 3 + 2));
                 influence.getWeights().add((float) ((1 + Math.cos(Math.PI * val / maxDist)) * influence.getWeight()));
             }
         }
