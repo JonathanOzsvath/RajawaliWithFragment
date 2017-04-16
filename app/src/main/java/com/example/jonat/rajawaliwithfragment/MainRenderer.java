@@ -20,7 +20,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import FapUtils.FapUtil;
@@ -39,22 +42,29 @@ public class MainRenderer extends Renderer {
 
     private FapUtil fapUtil;
     private Model model;
+    private long ido = 0;
 
-    private Task task;
+//    private Task task;
 
     MyLoaderOBJ objParser;
-
-    private int count = 0;
 
     private double[] light1Position = new double[]{-10, 0, 15};
     private double[] light2Position = new double[]{10, 0, 15};
 
     private int iter = 0;
 
+    private float[] renderedVertices;
+    private float[] renderedVertices2;
+    private Map<Integer, Float> changedVertices;
+    private ArrayList<Float> tmpVertices;
+
+    private Map<Integer, ArrayList<Integer>> indexek;
+
     public MainRenderer(Context context) {
         super(context);
         model = new Model(context);
         fapUtil = new FapUtil(context);
+        indexek = new TreeMap<>();
     }
 
     @Override
@@ -87,7 +97,7 @@ public class MainRenderer extends Renderer {
         sphere2.setMaterial(material);
         getCurrentScene().addChild(sphere2);
 
-        objParser = new MyLoaderOBJ(mContext.getResources(), mTextureManager, R.raw.yoda_with_mouth_obj);
+        objParser = new MyLoaderOBJ(mContext.getResources(), mTextureManager, R.raw.kondor_zoltan_with_mouth_1_obj);
         try {
             objParser.parse();
             mObjectGroup = objParser.getParsedObject();
@@ -103,9 +113,24 @@ public class MainRenderer extends Renderer {
 
         getCurrentScene().replaceAndSwitchCamera(getCurrentCamera(), arcball);
 
-        preCalculateDistance();
+        renderedVertices = new float[objParser.vertices.length];
+        renderedVertices2 = new float[objParser.vertices.length];
+        for (int i = 0; i < objParser.vertices.length; i++) {
+            renderedVertices[i] = objParser.vertices[i];
+            renderedVertices2[i] = objParser.vertices[i];
+        }
 
-        task = new Task();
+        for (int i = 0; i < objParser.currObjIndexData.vertexIndices.size(); i++) {
+            if (indexek.containsKey(objParser.currObjIndexData.vertexIndices.get(i))){
+                indexek.get(objParser.currObjIndexData.vertexIndices.get(i)).add(i);
+            }else {
+                ArrayList temp = new ArrayList();
+                temp.add(i);
+                indexek.put(objParser.currObjIndexData.vertexIndices.get(i), temp);
+            }
+        }
+
+        preCalculateDistance();
     }
 
     @Override
@@ -116,80 +141,10 @@ public class MainRenderer extends Renderer {
     public void onTouchEvent(MotionEvent motionEvent) {
     }
 
-//    final Thread thread = new Thread(){
-//        @Override
-//        public void run() {
-//            update();
-//        }
-//    };
-
-    class Task implements Runnable {
-
-        @Override
-        public void run() {
-            ;
-
-            if (fapUtil.getnFaps() != 0) {
-
-                StringBuilder builder = new StringBuilder();
-                float[] vertices = new float[mObjectGroup.getGeometry().getNumVertices() * 3];
-                ArrayList<Float> tmpVertices = (ArrayList<Float>) objParser.verticesAList.clone();
-
-                if (iter < fapUtil.getnFaps()) {
-                    int index = 0;
-                    for (int i = 0; i < 68; i++) {
-                        if (fapUtil.getMask().get(iter).get(i) == 1) {
-                            if (fapUtil.getFdps().containsKey(i)) {
-                                for (int j = 0; j < fapUtil.getFdps().get(i).size(); j++) {
-                                    for (int k = 0; k < fapUtil.getFdps().get(i).get(j).getIndeces().size(); k++) {
-                                        int bindex = fapUtil.getFdps().get(i).get(j).getIndeces().get(k);
-                                        float fapuMap = (float) fapUtil.getFapuMap().get(i);
-                                        float delta = (fapUtil.getFaps().get(iter).get(index)) *
-                                                (fapUtil.getFdps().get(i).get(j).getWeights().get(k) * fapuMap);
-
-                                        tmpVertices.set(bindex * 3, tmpVertices.get(bindex * 3) + delta * fapUtil.getFapAxis().get(i)[0]);
-                                        tmpVertices.set(bindex * 3 + 1, tmpVertices.get(bindex * 3 + 1) + delta * fapUtil.getFapAxis().get(i)[1]);
-                                        tmpVertices.set(bindex * 3 + 2, tmpVertices.get(bindex * 3 + 2) + delta * fapUtil.getFapAxis().get(i)[2]);
-                                        /*builder.append("i= " + i + " j= " + j + " k= " + k + "\n");
-                                        builder.append("index= " + index + " iter= " + iter+ "\n");
-                                        builder.append("bindex= " + bindex + " delta= " + delta+ "\n");
-                                        builder.append(tmpVertices.get(bindex * 3) + " " + tmpVertices.get(bindex * 3 + 1) + " " + tmpVertices.get(bindex * 3 + 2)+ "\n");*/
-                                    }
-                                }
-                            }
-                            index++;
-                        }
-                    }
-//                    writeToFile(builder.toString());
-
-                    iter++;
-                    for (int k = 0; k < objParser.currObjIndexData.vertexIndices.size(); k++) {
-                        int tme = (objParser.currObjIndexData.vertexIndices.get(k)).intValue() * 3;
-                        vertices[k * 3] = tmpVertices.get(tme);
-                        vertices[k * 3 + 1] = tmpVertices.get(tme + 1);
-                        vertices[k * 3 + 2] = tmpVertices.get(tme + 2);
-                    }
-                    mObjectGroup.getGeometry().setData(vertices, objParser.normalsList, objParser.textureCoords, objParser.colors, objParser.indeces, false);
-                    mObjectGroup.reload();
-                }
-                if (iter == fapUtil.getnFaps()) {
-                    fapUtil.setnFaps(0);
-                }
-            }
-        }
-    }
-
     @Override
     protected void onRender(long ellapsedRealtime, double deltaTime) {
         super.onRender(ellapsedRealtime, deltaTime);
-
-        /*try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-        task.run();
-//        update();
+        update();
     }
 
     public void writeToFile(String s) {
@@ -210,14 +165,76 @@ public class MainRenderer extends Renderer {
         }
     }
 
-    public void update() {
+    public boolean egyenlo(float[] f1, float[] f2){
+        boolean t = true;
 
+        if (f1.length != f2.length){
+            return false;
+        }else {
+            for (int i = 0; i < f1.length; i++) {
+                if (f1[i] != f2[i]){
+                    System.out.println();
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void update() {
+        if (fapUtil.getnFaps() != 0) {
+
+            if (iter < fapUtil.getnFaps()) {
+                changedVertices = new HashMap<>();
+                int index = 0;
+                for (int i = 0; i < 68; i++) {
+                    if (fapUtil.getMask().get(iter).get(i) == 1) {
+                        if (fapUtil.getFdps().containsKey(i)) {
+                            for (int j = 0; j < fapUtil.getFdps().get(i).size(); j++) {
+                                for (int k = 0; k < fapUtil.getFdps().get(i).get(j).getIndeces().size(); k++) {
+                                    int bindex = fapUtil.getFdps().get(i).get(j).getIndeces().get(k);
+                                    float fapuMap = (float) fapUtil.getFapuMap().get(i);
+                                    float delta = (fapUtil.getFaps().get(iter).get(index)) *
+                                            (fapUtil.getFdps().get(i).get(j).getWeights().get(k) * fapuMap);
+
+                                    if (delta != 0) {
+                                        ArrayList<Integer> arrayList = indexek.get(bindex);
+                                        for (int i1 : arrayList){
+                                            if (!changedVertices.containsKey(i1*3))
+                                                changedVertices.put(i1*3, renderedVertices[i1*3]);
+                                            if (!changedVertices.containsKey(i1*3+1))
+                                                changedVertices.put(i1*3+1, renderedVertices[i1*3+1]);
+                                            if (!changedVertices.containsKey(i1*3+2))
+                                                changedVertices.put(i1*3+2, renderedVertices[i1*3+2]);
+
+                                            renderedVertices[i1*3] += delta * fapUtil.getFapAxis().get(i)[0];
+                                            renderedVertices[i1*3+1] += delta * fapUtil.getFapAxis().get(i)[1];
+                                            renderedVertices[i1*3+2] += delta * fapUtil.getFapAxis().get(i)[2];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        index++;
+                    }
+                }
+
+                iter++;
+                mObjectGroup.getGeometry().setData(renderedVertices, objParser.normalsList, objParser.textureCoords, objParser.colors, objParser.indeces, false);
+                mObjectGroup.reload();
+
+                for (int a : changedVertices.keySet()) {
+                    renderedVertices[a] = changedVertices.get(a);
+                }
+            }
+            if (iter == fapUtil.getnFaps()) {
+                fapUtil.setnFaps(0);
+            }
+        }
     }
 
     public void play() {
         fapUtil.loadFaps();
-        count++;
-        new Thread(task).start();
         iter = 0;
     }
 

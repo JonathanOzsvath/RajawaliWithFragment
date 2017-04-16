@@ -49,7 +49,7 @@ public class MyLoaderOBJ extends MyAMeshLoader {
 
     public MyLoaderOBJ.ObjIndexData currObjIndexData;
     public ArrayList objIndices;
-    public ArrayList verticesAList;
+    public ArrayList<Float> verticesAList;
     public ArrayList texCoords;
     public ArrayList normalsAList;
     public MyLoaderOBJ.MaterialLib matLib;

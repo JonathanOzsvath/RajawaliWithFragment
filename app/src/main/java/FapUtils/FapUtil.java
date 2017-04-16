@@ -71,7 +71,7 @@ public class FapUtil {
 
     public void loadFdp() {
         try {
-            InputStream is = context.getResources().openRawResource(R.raw.fdp_yoda);
+            InputStream is = context.getResources().openRawResource(R.raw.fdp);
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
