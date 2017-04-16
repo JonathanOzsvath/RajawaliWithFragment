@@ -27,7 +27,7 @@ public class Model {
     }
 
     public void readInVertices(){
-        InputStream inputStream = context.getResources().openRawResource(R.raw.kondor_zoltan_with_mouth_1_obj);
+        InputStream inputStream = context.getResources().openRawResource(R.raw.yoda_with_mouth_obj);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
         String line;
