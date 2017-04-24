@@ -40,9 +40,7 @@ public class MainRenderer extends Renderer {
     private Sphere sphere2;
     private Object3D mObjectGroup;
 
-    private FapUtil fapUtil;
-    private Model model;
-    private long ido = 0;
+    public FapUtil fapUtil;
 
 //    private Task task;
 
@@ -56,13 +54,11 @@ public class MainRenderer extends Renderer {
     private float[] renderedVertices;
     private float[] renderedVertices2;
     private Map<Integer, Float> changedVertices;
-    private ArrayList<Float> tmpVertices;
 
     private Map<Integer, ArrayList<Integer>> indexek;
 
     public MainRenderer(Context context) {
         super(context);
-        model = new Model(context);
         fapUtil = new FapUtil(context);
         indexek = new TreeMap<>();
     }
@@ -97,7 +93,7 @@ public class MainRenderer extends Renderer {
         sphere2.setMaterial(material);
         getCurrentScene().addChild(sphere2);
 
-        objParser = new MyLoaderOBJ(mContext.getResources(), mTextureManager, R.raw.kondor_zoltan_with_mouth_1_obj);
+        objParser = new MyLoaderOBJ(mContext.getResources(), mTextureManager, R.raw.yoda_with_mouth_obj);
         try {
             objParser.parse();
             mObjectGroup = objParser.getParsedObject();
@@ -219,7 +215,7 @@ public class MainRenderer extends Renderer {
                     }
                 }
 
-                iter++;
+                iter += 2;
                 mObjectGroup.getGeometry().setData(renderedVertices, objParser.normalsList, objParser.textureCoords, objParser.colors, objParser.indeces, false);
                 mObjectGroup.reload();
 
@@ -227,7 +223,7 @@ public class MainRenderer extends Renderer {
                     renderedVertices[a] = changedVertices.get(a);
                 }
             }
-            if (iter == fapUtil.getnFaps()) {
+            if (iter >= fapUtil.getnFaps()) {
                 fapUtil.setnFaps(0);
             }
         }
@@ -259,63 +255,63 @@ public class MainRenderer extends Renderer {
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
                 // x
-                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3),
-                        model.getVertices().get(index2 * 3));
+                val = calculateDistanceXYZ(objParser.verticesAList.get(index1 * 3),
+                        objParser.verticesAList.get(index2 * 3));
                 if (val > maxDist)
                     maxDist = val;
             }
 
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
-                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3),
-                        model.getVertices().get(index2 * 3));
+                val = calculateDistanceXYZ(objParser.verticesAList.get(index1 * 3),
+                        objParser.verticesAList.get(index2 * 3));
                 influence.getWeights().add((float) ((1 + Math.cos(Math.PI * val / maxDist)) * influence.getWeight()));
             }
         } else if (influence.getType().equals("RaisedCosInfluenceWaveY")) {
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
                 // y
-                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3 + 1),
-                        model.getVertices().get(index2 * 3 + 1));
+                val = calculateDistanceXYZ(objParser.verticesAList.get(index1 * 3 + 1),
+                        objParser.verticesAList.get(index2 * 3 + 1));
                 if (val > maxDist)
                     maxDist = val;
             }
 
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
-                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3 + 1),
-                        model.getVertices().get(index2 * 3 + 1));
+                val = calculateDistanceXYZ(objParser.verticesAList.get(index1 * 3 + 1),
+                        objParser.verticesAList.get(index2 * 3 + 1));
                 influence.getWeights().add((float) ((1 + Math.cos(Math.PI * val / maxDist)) * influence.getWeight()));
             }
         } else if (influence.getType().equals("RaisedCosInfluenceWaveZ")) {
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
                 // z
-                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3 + 2),
-                        model.getVertices().get(index2 * 3 + 2));
+                val = calculateDistanceXYZ(objParser.verticesAList.get(index1 * 3 + 2),
+                        objParser.verticesAList.get(index2 * 3 + 2));
                 if (val > maxDist)
                     maxDist = val;
             }
 
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
-                val = calculateDistanceXYZ(model.getVertices().get(index1 * 3 + 2),
-                        model.getVertices().get(index2 * 3 + 2));
+                val = calculateDistanceXYZ(objParser.verticesAList.get(index1 * 3 + 2),
+                        objParser.verticesAList.get(index2 * 3 + 2));
                 influence.getWeights().add((float) ((1 + Math.cos(Math.PI * val / maxDist)) * influence.getWeight()));
             }
         } else if (influence.getType().equals("RaisedCosInfluenceSph")) {
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
-                val = calculateDistanceSph(model.getVertices().get(index1 * 3), model.getVertices().get(index1 * 3 + 1), model.getVertices().get(index1 * 3 + 2),
-                        model.getVertices().get(index2 * 3), model.getVertices().get(index2 * 3 + 1), model.getVertices().get(index2 * 3 + 2));
+                val = calculateDistanceSph(objParser.verticesAList.get(index1 * 3), objParser.verticesAList.get(index1 * 3 + 1), objParser.verticesAList.get(index1 * 3 + 2),
+                        objParser.verticesAList.get(index2 * 3), objParser.verticesAList.get(index2 * 3 + 1), objParser.verticesAList.get(index2 * 3 + 2));
                 if (val > maxDist)
                     maxDist = val;
             }
 
             for (int i = 0; i < influence.getIndeces().size(); i++) {
                 int index1 = influence.getIndeces().get(i);
-                val = calculateDistanceSph(model.getVertices().get(index1 * 3), model.getVertices().get(index1 * 3 + 1), model.getVertices().get(index1 * 3 + 2),
-                        model.getVertices().get(index2 * 3), model.getVertices().get(index2 * 3 + 1), model.getVertices().get(index2 * 3 + 2));
+                val = calculateDistanceSph(objParser.verticesAList.get(index1 * 3), objParser.verticesAList.get(index1 * 3 + 1), objParser.verticesAList.get(index1 * 3 + 2),
+                        objParser.verticesAList.get(index2 * 3), objParser.verticesAList.get(index2 * 3 + 1), objParser.verticesAList.get(index2 * 3 + 2));
                 influence.getWeights().add((float) ((1 + Math.cos(Math.PI * val / maxDist)) * influence.getWeight()));
             }
         }
@@ -325,7 +321,6 @@ public class MainRenderer extends Renderer {
         float d = second - first;
         return Math.abs(d);
     }
-
 
     public float calculateDistanceSph(float firstX, float firstY, float firstZ, float secondX, float secondY, float secondZ) {
         float d1 = secondX - firstX;

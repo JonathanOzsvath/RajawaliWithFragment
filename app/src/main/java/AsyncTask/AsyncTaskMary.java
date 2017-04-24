@@ -83,7 +83,7 @@ public class AsyncTaskMary extends AsyncTask<String, Void, String> {
                 error = "Mary server not found!";
                 e.printStackTrace();
             }
-        }else {
+        } else {
             File f = new File(cacheDir, "proba.txt");
             try {
                 URL url = new URL(params[0]);
@@ -92,12 +92,10 @@ public class AsyncTaskMary extends AsyncTask<String, Void, String> {
                 OutputStream output = new FileOutputStream(f);
                 StringBuilder sb = new StringBuilder();
                 int ch;
-                while ((ch = input.read()) != -1){
-                    sb.append((char)ch);
-                    output.write((char)ch);
+                while ((ch = input.read()) != -1) {
+                    sb.append((char) ch);
+                    output.write((char) ch);
                 }
-
-                System.out.println(sb.toString());
                 output.flush();
                 output.close();
                 input.close();
@@ -110,7 +108,6 @@ public class AsyncTaskMary extends AsyncTask<String, Void, String> {
                 e.printStackTrace();
             }
         }
-
         return null;
     }
 
@@ -123,10 +120,10 @@ public class AsyncTaskMary extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         pd.dismiss();
-        if (error != null){
+        if (error != null) {
             listener.onError(error);
-        }else {
-            listener.OnTaskComplete("Ready", outputType);
+        } else {
+            listener.OnTaskComplete("Download completed", outputType);
         }
     }
 }

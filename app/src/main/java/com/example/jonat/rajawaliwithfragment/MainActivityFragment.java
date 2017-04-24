@@ -47,6 +47,7 @@ import java.util.Locale;
 
 import AsyncTask.AsyncTaskMary;
 import Pojo.ChatMessage;
+import Visemes.Visemes;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -70,6 +71,7 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
     private ArrayList<ChatMessage> chatMessages;
+    private String response;
 
     public static final String OUTPUT_TYPE_AUDIO = "AUDIO";
     public static final String OUTPUT_TYPE_ACOUSTPARAMS = "ACOUSTPARAMS";
@@ -217,12 +219,13 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
 
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    String mySentence = result.get(0);
                     chatMessages.add(new ChatMessage(result.get(0),true, false));
                     tvMyMessage.setText(result.get(0));
                     if (tvMyMessage.getVisibility() == View.INVISIBLE)
                         tvMyMessage.setVisibility(View.VISIBLE);
 
-                    String response = chat.multisentenceRespond(result.get(0));
+                    response = chat.multisentenceRespond(mySentence);
                     chatMessages.add(new ChatMessage(response,false,false));
                     tvComputerMessage.setText(response);
                     if (tvComputerMessage.getVisibility() == View.INVISIBLE)
@@ -347,6 +350,8 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
     @Override
     public void OnTaskComplete(String aResult, String outputType) {
         Toast.makeText(getContext(), aResult, Toast.LENGTH_LONG).show();
+
+        Visemes visemes = new Visemes(getContext(), mainRenderer.fapUtil, response);
 
         if (outputType == OUTPUT_TYPE_AUDIO) {
             File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Mary/proba.mp3");

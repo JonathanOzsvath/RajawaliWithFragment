@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.example.jonat.rajawaliwithfragment.R;
@@ -22,7 +21,7 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
     private static final int MY_MESSAGE = 0, OTHER_MESSAGE = 1, MY_IMAGE = 2, OTHER_IMAGE = 3;
 
     public ChatMessageAdapter(Context context, List<ChatMessage> data) {
-        super(context, R.layout.item_mine_message, data);
+        super(context, R.layout.item_user_message, data);
     }
 
     @Override
@@ -45,7 +44,7 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
     public View getView(int position, View convertView, ViewGroup parent) {
         int viewType = getItemViewType(position);
         if (viewType == MY_MESSAGE) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_mine_message, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_user_message, parent, false);
 
             TextView textView = (TextView) convertView.findViewById(R.id.text);
             textView.setText(getItem(position).getContent());
@@ -61,12 +60,12 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
            // convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_other_image, parent, false);
         }
 
-        convertView.findViewById(R.id.chatMessageView).setOnClickListener(new View.OnClickListener() {
+        /*convertView.findViewById(R.id.chatMessageView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "onClick", Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
 
 
         return convertView;
