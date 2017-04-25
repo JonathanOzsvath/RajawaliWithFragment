@@ -226,6 +226,9 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
                         tvMyMessage.setVisibility(View.VISIBLE);
 
                     response = chat.multisentenceRespond(mySentence);
+//                    response = "Hi it's great to see you!";
+//                    response = "Hi! I can really feel your smile today!";
+//                    response = "Hi it's delightful to see you!";
                     chatMessages.add(new ChatMessage(response,false,false));
                     tvComputerMessage.setText(response);
                     if (tvComputerMessage.getVisibility() == View.INVISIBLE)
@@ -351,13 +354,18 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
     public void OnTaskComplete(String aResult, String outputType) {
         Toast.makeText(getContext(), aResult, Toast.LENGTH_LONG).show();
 
-        Visemes visemes = new Visemes(getContext(), mainRenderer.fapUtil, response);
-
         if (outputType == OUTPUT_TYPE_AUDIO) {
             File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Mary/proba.mp3");
             MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), Uri.fromFile(cacheDir));
             mediaPlayer.start();
         }
+
+        if (outputType == OUTPUT_TYPE_ACOUSTPARAMS) {
+            Visemes visemes = new Visemes(getContext(), mainRenderer.fapUtil, response);
+        }
+
+        /*Thread thread1 = new Thread(new PlayAudio(getContext(), outputType));
+        thread1.start();*/
     }
 
     @Override

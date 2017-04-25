@@ -70,19 +70,13 @@ public class FapUtil {
     }
 
     public FapUtil() {
-        fapAxis = new ArrayList<>();
-        fapuMap = new ArrayList<>();
-        fdps = new TreeMap<>();
-
         mask = new ArrayList<>();
         faps = new ArrayList<>();
-
-        FAPU = new HashMap<>();
     }
 
     public void loadFdp() {
         try {
-            InputStream is = context.getResources().openRawResource(R.raw.fdp_yoda);
+            InputStream is = context.getResources().openRawResource(R.raw.fdp);
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -292,7 +286,7 @@ public class FapUtil {
     }
 
     public void loadFaps() {
-        InputStream in = context.getResources().openRawResource(R.raw.newfap);
+        InputStream in = context.getResources().openRawResource(R.raw.anger);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
         String line;
         boolean init = true;

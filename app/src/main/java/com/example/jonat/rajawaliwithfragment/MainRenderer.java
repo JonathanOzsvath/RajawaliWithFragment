@@ -93,7 +93,7 @@ public class MainRenderer extends Renderer {
         sphere2.setMaterial(material);
         getCurrentScene().addChild(sphere2);
 
-        objParser = new MyLoaderOBJ(mContext.getResources(), mTextureManager, R.raw.yoda_with_mouth_obj);
+        objParser = new MyLoaderOBJ(mContext.getResources(), mTextureManager, R.raw.kondor_zoltan_with_mouth_1_obj);
         try {
             objParser.parse();
             mObjectGroup = objParser.getParsedObject();
@@ -215,16 +215,20 @@ public class MainRenderer extends Renderer {
                     }
                 }
 
-                iter += 2;
+                iter += 1;
                 mObjectGroup.getGeometry().setData(renderedVertices, objParser.normalsList, objParser.textureCoords, objParser.colors, objParser.indeces, false);
                 mObjectGroup.reload();
 
                 for (int a : changedVertices.keySet()) {
                     renderedVertices[a] = changedVertices.get(a);
                 }
+
             }
             if (iter >= fapUtil.getnFaps()) {
                 fapUtil.setnFaps(0);
+                mObjectGroup.getGeometry().setData(renderedVertices, objParser.normalsList, objParser.textureCoords, objParser.colors, objParser.indeces, false);
+                mObjectGroup.reload();
+                iter = 0;
             }
         }
     }

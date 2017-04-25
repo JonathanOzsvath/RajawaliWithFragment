@@ -1,6 +1,8 @@
 package Visemes;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.widget.ArrayAdapter;
 
 import org.w3c.dom.Document;
@@ -12,9 +14,11 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +42,7 @@ public class Visemes {
     private ArrayList<Integer> duration;
     private List<Integer> maskList;
     private List<Integer> fapList;
+    private int nFaps;
 
     private String aah = " A: AI A { al aU Q ";
     private String B_M_P = " b m m= p ";
@@ -60,6 +65,7 @@ public class Visemes {
         this.context = context;
         this.text = text;
 
+        nFaps = 0;
         syllables = new ArrayList<>();
         duration = new ArrayList<>();
         maskList = new ArrayList();
@@ -85,16 +91,16 @@ public class Visemes {
 
             NodeList syllablesNode = doc.getElementsByTagName("syllable");
             for (int i = 0; i < syllablesNode.getLength(); i++) {
-                Node phs = syllablesNode.item(i);
+                NodeList phs = syllablesNode.item(i).getChildNodes();
                 ArrayList<Phoneme> phonemes = new ArrayList();
 
-                for (int j = 0; j < phs.getChildNodes().getLength(); j++) {
-                    if (phs.getChildNodes().item(j).getNodeName().equals("ph")) {
+                for (int j = 0; j < phs.getLength(); j++) {
+                    if (phs.item(j).getNodeName().equals("ph")) {
                         Phoneme phoneme = new Phoneme();
-                        Node node = phs.getChildNodes().item(j);
+                        Node node = phs.item(j);
                         phoneme.setP(node.getAttributes().getNamedItem("p").getNodeValue());
                         if (node.getAttributes().getNamedItem("f0") != null)
-                            phoneme.setFreq(node.getAttributes().getNamedItem("f0").getNodeName());
+                            phoneme.setFreq(node.getAttributes().getNamedItem("f0").getNodeValue());
                         phoneme.setDuration(Integer.valueOf(node.getAttributes().getNamedItem("d").getNodeValue()));
                         phoneme.setEnd(Float.valueOf(node.getAttributes().getNamedItem("end").getNodeValue()));
                         phonemes.add(phoneme);
@@ -104,32 +110,25 @@ public class Visemes {
                 }
                 syllables.add(phonemes);
             }
-            fapUtil.setnFaps(0);
             fapUtil.setFps(25);
             fapUtil.setVersion("2.1");
             fapUtil.setStupidname("ownFap");
             for (int i = 0; i < syllables.size(); i++) {
                 for (int j = 0; j < syllables.get(i).size(); j++) {
                     getViseme(syllables.get(i).get(j).getP());
-                    List<List<Integer>> tempFaps = fapUtil.getFaps();
-                    tempFaps.add(fapList.subList(1, fapList.size()));
-                    fapUtil.setFaps(tempFaps);
-                    List<List<Integer>> m = fapUtil.getMask();
-                    m.add(maskList);
-                    fapUtil.setMask(m);
-                    fapUtil.setnFaps(fapUtil.getnFaps() + 1);
+                    fapUtil.getFaps().add(fapList.subList(1, fapList.size()));
+                    fapUtil.getMask().add(maskList);
+
+                    nFaps++;
                 }
             }
             // hozzá rakjuk a relaxált állapotot
             getViseme("relax");
-            List<List<Integer>> tempFaps = fapUtil.getFaps();
-            tempFaps.add(fapList.subList(1, fapList.size()));
-            fapUtil.setFaps(tempFaps);
-            List<List<Integer>> m = fapUtil.getMask();
-            m.add(maskList);
-            fapUtil.setMask(m);
-            fapUtil.setnFaps(fapUtil.getnFaps() + 1);
-//            fill();
+            fapUtil.getFaps().add(fapList.subList(1, fapList.size()));
+            fapUtil.getMask().add(maskList);
+            nFaps++;
+
+            fill();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -144,6 +143,143 @@ public class Visemes {
 
     public void fill() {
         FapUtil retFAPs = new FapUtil();
+
+        for (int j = 0; j < nFaps - 1; j++) {
+            MaskAndFap thisFap = new MaskAndFap();
+            thisFap.mask = fapUtil.getMask().get(j);
+            thisFap.fap = fapUtil.getFaps().get(j);
+
+            MaskAndFap nextFap = new MaskAndFap();
+            nextFap.mask = fapUtil.getMask().get(j + 1);
+            nextFap.fap = fapUtil.getFaps().get(j + 1);
+
+            MaskAndFap diff = diff(thisFap, nextFap, duration.get(j), 25);
+            retFAPs.getMask().add(thisFap.mask);
+            retFAPs.getFaps().add(thisFap.fap);
+
+            for (int k = 0; k < duration.get(j) / 50.0; k++) {
+                MaskAndFap tmp = sum(thisFap, diff);
+                thisFap = tmp;
+                retFAPs.getMask().add(tmp.mask);
+                retFAPs.getFaps().add(tmp.fap);
+            }
+        }
+
+        retFAPs.getMask().add(fapUtil.getMask().get(nFaps - 1));
+        retFAPs.getFaps().add(fapUtil.getFaps().get(nFaps - 1));
+        nFaps = retFAPs.getFaps().size();
+
+        fapUtil.setMask(retFAPs.getMask());
+        fapUtil.setFaps(retFAPs.getFaps());
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(fapUtil.getVersion() + " " + fapUtil.getStupidname() + " " + fapUtil.getFps() + " " + nFaps + "\n");
+        for (int j = 0; j < fapUtil.getFaps().size(); j++) {
+            for (int k = 0; k < fapUtil.getMask().get(j).size(); k++) {
+                stringBuilder.append(fapUtil.getMask().get(j).get(k).toString());
+                if (k < fapUtil.getMask().get(j).size() - 1)
+                    stringBuilder.append(" ");
+            }
+
+            stringBuilder.append("\n");
+            stringBuilder.append(j + " ");
+            for (int k = 0; k < fapUtil.getFaps().get(j).size(); k++) {
+                stringBuilder.append(fapUtil.getFaps().get(j).get(k).toString());
+                if (k < fapUtil.getFaps().get(j).size() - 1)
+                    stringBuilder.append(" ");
+            }
+            stringBuilder.append("\n");
+        }
+        writeToFile(stringBuilder.toString());
+
+        fapUtil.setnFaps(nFaps);
+    }
+
+    public void writeToFile(String s) {
+        File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Mary");
+        if (!cacheDir.exists())
+            cacheDir.mkdirs();
+
+        try {
+            File f = new File(cacheDir, "fap.txt");
+            FileOutputStream fileOutputStream = new FileOutputStream(f);
+            OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream);
+            writer.append(s);
+            writer.close();
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public MaskAndFap sum(MaskAndFap prevFap, MaskAndFap div) {
+        MaskAndFap fap3 = new MaskAndFap();
+
+        if (prevFap.mask.size() == 68 && div.mask.size() == 68) {
+            for (int j = 0; j < 68; j++) {
+                if (prevFap.mask.get(j) == 0 && div.mask.get(j) == 1) {
+                    fap3.mask.add(1);
+                    fap3.fap.add(div.fap.get(index(div.mask, j)));
+                } else if (prevFap.mask.get(j) == 1 && div.mask.get(j) == 1) {
+                    fap3.mask.add(1);
+                    fap3.fap.add(prevFap.fap.get(index(prevFap.mask, j)) + div.fap.get(index(div.mask, j)));
+                } else if (prevFap.mask.get(j) == 1 && div.mask.get(j) == 0) {
+                    fap3.mask.add(1);
+                    fap3.fap.add(prevFap.fap.get(index(prevFap.mask, j)));
+                } else {
+                    fap3.mask.add(0);
+                }
+            }
+        } else {
+            try {
+                throw new Exception("sum-ben a mask száma kicsi");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return fap3;
+    }
+
+    public MaskAndFap diff(MaskAndFap fap1, MaskAndFap fap2, int div, int param) {
+        MaskAndFap fap3 = new MaskAndFap();
+
+        if (fap1.mask.size() == 68 && fap2.mask.size() == 68) {
+            for (int j = 0; j < 68; j++) {
+                if (fap1.mask.get(j) == 1 && fap2.mask.get(j) == 0 && fap1.fap.get(index(fap1.mask, j)) != 0) {
+                    fap3.mask.add(1);
+                    fap3.fap.add(-(fap1.fap.get(index(fap1.mask, j))) / div * param);
+                } else if (fap1.mask.get(j) == 0 && fap2.mask.get(j) == 1) {
+                    fap3.mask.add(1);
+                    fap3.fap.add(fap2.fap.get(index(fap2.mask, j)) / div * param);
+                } else if (fap1.mask.get(j) == 1 && fap2.mask.get(j) == 1) {
+                    fap3.mask.add(1);
+                    fap3.fap.add((fap2.fap.get(index(fap2.mask, j)) - fap1.fap.get(index(fap1.mask, j))) / div * param);
+                } else {
+                    fap3.mask.add(0);
+                }
+            }
+        } else {
+            try {
+                throw new Exception("diff-ben a mask száma kicsi");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return fap3;
+    }
+
+    public int index(List<Integer> mask, int k) {
+        if (mask.get(k) == 0) {
+            return -1;
+        }
+        int ret = 0;
+        for (int j = 0; j < k; j++) {
+            ret += mask.get(j);
+        }
+        return ret;
     }
 
     public void getViseme(String p) {
@@ -197,4 +333,15 @@ public class Visemes {
             fapList = Arrays.asList(0, 0);
         }
     }
+
+    private class MaskAndFap {
+        private List<Integer> mask;
+        private List<Integer> fap;
+
+        public MaskAndFap() {
+            mask = new ArrayList<>();
+            fap = new ArrayList<>();
+        }
+    }
+
 }
