@@ -76,7 +76,7 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
     public static final String OUTPUT_TYPE_AUDIO = "AUDIO";
     public static final String OUTPUT_TYPE_ACOUSTPARAMS = "ACOUSTPARAMS";
 
-//    private final String BASE_URL = "http://192.168.0.113:59125/";
+//    private final String BASE_URL = "http://192.168.0.103:59125/";
     private final String BASE_URL = "http://mary.dfki.de:59125/";
     private final String INPUT_TYPE = "TEXT";
     private final String LOCALE = "en_US";
@@ -355,13 +355,14 @@ public class MainActivityFragment extends Fragment implements IDisplay, AsyncTas
         Toast.makeText(getContext(), aResult, Toast.LENGTH_LONG).show();
 
         if (outputType == OUTPUT_TYPE_AUDIO) {
-            File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Mary/proba.mp3");
-            MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), Uri.fromFile(cacheDir));
-            mediaPlayer.start();
+
         }
 
         if (outputType == OUTPUT_TYPE_ACOUSTPARAMS) {
             Visemes visemes = new Visemes(getContext(), mainRenderer.fapUtil, response);
+            File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Mary/proba.mp3");
+            MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), Uri.fromFile(cacheDir));
+            mediaPlayer.start();
         }
 
         /*Thread thread1 = new Thread(new PlayAudio(getContext(), outputType));

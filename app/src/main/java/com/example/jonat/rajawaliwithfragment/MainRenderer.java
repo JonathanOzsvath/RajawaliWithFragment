@@ -14,17 +14,14 @@ import org.rajawali3d.primitives.Sphere;
 import org.rajawali3d.renderer.Renderer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 
 import FapUtils.FapUtil;
 import Loader.MyLoaderOBJ;
@@ -52,7 +49,6 @@ public class MainRenderer extends Renderer {
     private int iter = 0;
 
     private float[] renderedVertices;
-    private float[] renderedVertices2;
     private Map<Integer, Float> changedVertices;
 
     private Map<Integer, ArrayList<Integer>> indexek;
@@ -93,7 +89,7 @@ public class MainRenderer extends Renderer {
         sphere2.setMaterial(material);
         getCurrentScene().addChild(sphere2);
 
-        objParser = new MyLoaderOBJ(mContext.getResources(), mTextureManager, R.raw.kondor_zoltan_with_mouth_1_obj);
+        objParser = new MyLoaderOBJ(mContext.getResources(), mTextureManager, R.raw.yoda_with_mouth_obj);
         try {
             objParser.parse();
             mObjectGroup = objParser.getParsedObject();
@@ -110,10 +106,8 @@ public class MainRenderer extends Renderer {
         getCurrentScene().replaceAndSwitchCamera(getCurrentCamera(), arcball);
 
         renderedVertices = new float[objParser.vertices.length];
-        renderedVertices2 = new float[objParser.vertices.length];
         for (int i = 0; i < objParser.vertices.length; i++) {
             renderedVertices[i] = objParser.vertices[i];
-            renderedVertices2[i] = objParser.vertices[i];
         }
 
         for (int i = 0; i < objParser.currObjIndexData.vertexIndices.size(); i++) {
@@ -140,7 +134,8 @@ public class MainRenderer extends Renderer {
     @Override
     protected void onRender(long ellapsedRealtime, double deltaTime) {
         super.onRender(ellapsedRealtime, deltaTime);
-        update();
+
+        animation();
     }
 
     public void writeToFile(String s) {
@@ -177,7 +172,7 @@ public class MainRenderer extends Renderer {
         return true;
     }
 
-    public void update() {
+    public void animation() {
         if (fapUtil.getnFaps() != 0) {
 
             if (iter < fapUtil.getnFaps()) {
@@ -192,7 +187,6 @@ public class MainRenderer extends Renderer {
                                     float fapuMap = (float) fapUtil.getFapuMap().get(i);
                                     float delta = (fapUtil.getFaps().get(iter).get(index)) *
                                             (fapUtil.getFdps().get(i).get(j).getWeights().get(k) * fapuMap);
-
                                     if (delta != 0) {
                                         ArrayList<Integer> arrayList = indexek.get(bindex);
                                         for (int i1 : arrayList){
@@ -214,20 +208,17 @@ public class MainRenderer extends Renderer {
                         index++;
                     }
                 }
-
                 iter += 1;
-                mObjectGroup.getGeometry().setData(renderedVertices, objParser.normalsList, objParser.textureCoords, objParser.colors, objParser.indeces, false);
+                mObjectGroup.getGeometry().setData(renderedVertices, objParser.normalsList,
+                        objParser.textureCoords, objParser.colors, objParser.indeces, false);
                 mObjectGroup.reload();
 
                 for (int a : changedVertices.keySet()) {
                     renderedVertices[a] = changedVertices.get(a);
                 }
-
             }
-            if (iter >= fapUtil.getnFaps()) {
+            if (iter >= fapUtil.getnFaps()){
                 fapUtil.setnFaps(0);
-                mObjectGroup.getGeometry().setData(renderedVertices, objParser.normalsList, objParser.textureCoords, objParser.colors, objParser.indeces, false);
-                mObjectGroup.reload();
                 iter = 0;
             }
         }

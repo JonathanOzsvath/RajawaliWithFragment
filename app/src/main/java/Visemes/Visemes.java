@@ -71,10 +71,13 @@ public class Visemes {
         maskList = new ArrayList();
         fapList = new ArrayList();
 
-        getPhonemes(text);
+        fapUtil.setFaps(new ArrayList<List<Integer>>());
+        fapUtil.setMask(new ArrayList<List<Integer>>());
+
+        getPhonemes();
     }
 
-    public void getPhonemes(String text) {
+    public void getPhonemes() {
 
         File cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "Mary");
         File f = new File(cacheDir, "proba.txt");
@@ -128,6 +131,7 @@ public class Visemes {
             fapUtil.getMask().add(maskList);
             nFaps++;
 
+//            fapUtil.setnFaps(nFaps);
             fill();
 
         } catch (FileNotFoundException e) {
@@ -172,7 +176,7 @@ public class Visemes {
         fapUtil.setMask(retFAPs.getMask());
         fapUtil.setFaps(retFAPs.getFaps());
 
-        StringBuilder stringBuilder = new StringBuilder();
+        /*StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(fapUtil.getVersion() + " " + fapUtil.getStupidname() + " " + fapUtil.getFps() + " " + nFaps + "\n");
         for (int j = 0; j < fapUtil.getFaps().size(); j++) {
             for (int k = 0; k < fapUtil.getMask().get(j).size(); k++) {
@@ -190,7 +194,7 @@ public class Visemes {
             }
             stringBuilder.append("\n");
         }
-        writeToFile(stringBuilder.toString());
+        writeToFile(stringBuilder.toString());*/
 
         fapUtil.setnFaps(nFaps);
     }
@@ -287,7 +291,7 @@ public class Visemes {
             maskList = Arrays.asList(0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
             fapList = Arrays.asList(0, 420, -72, -449, -156, -152, -623, -404, -56, -54, -5, -23, 2, -6, -27, -26, -49, 10, 3, -210, -56, -56);
         } else if (B_M_P.contains(p)) {
-            maskList = Arrays.asList(0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            maskList = Arrays.asList(0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
             fapList = Arrays.asList(0, 2, 166, 150, 206, 2, 174, 1, 50, 38, 487, -53);
         } else if (bigaah.contains(p)) {
             maskList = Arrays.asList(0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);

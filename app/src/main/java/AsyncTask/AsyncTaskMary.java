@@ -84,7 +84,7 @@ public class AsyncTaskMary extends AsyncTask<String, Void, String> {
                 e.printStackTrace();
             }
         } else {
-            File f = new File(cacheDir, "proba.txt");
+            File f = new File(cacheDir, "acoustparams.xml");
             try {
                 URL url = new URL(params[0]);
 
